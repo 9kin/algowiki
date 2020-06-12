@@ -1,0 +1,377 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="ru" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="ru" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Декартово дерево (treap, дерамида) &mdash; документация algo 1</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script src="../_static/translations.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Алфавитный указатель" href="../genindex.html" />
+    <link rel="search" title="Поиск" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html">
+          
+
+          
+            
+            <img src="../_static/favicon.ico" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">Декартово дерево (treap, дерамида)</a></li>
+<li><a class="reference internal" href="#id1">Преимущества такой организации данных</a></li>
+<li><a class="reference internal" href="#id2">Операции</a></li>
+<li><a class="reference internal" href="#id3">Описание реализации</a></li>
+<li><a class="reference internal" href="#id4">Реализация</a></li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">algo</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Декартово дерево (treap, дерамида)</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/data_structures/treap.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="treap">
+<h1>Декартово дерево (treap, дерамида)<a class="headerlink" href="#treap" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Декартово дерево - это структура данных, объединяющая в себе бинарное дерево поиска и бинарную кучу (отсюда и второе её название: treap (tree+heap) и дерамида (дерево+пирамида).</p>
+<p>Более строго, это структура данных, которая хранит пары <span class="math notranslate nohighlight">\((X,Y)\)</span> в виде бинарного дерева таким образом, что она является бинарным деревом поиска по <span class="math notranslate nohighlight">\(x\)</span> и бинарной пирамидой по <span class="math notranslate nohighlight">\(y\)</span>. Предполагая, что все <span class="math notranslate nohighlight">\(X\)</span> и все <span class="math notranslate nohighlight">\(Y\)</span> являются различными, получаем, что если некоторый элемент дерева содержит <span class="math notranslate nohighlight">\((X_0,Y_0)\)</span>, то у всех элементов в левом поддереве <span class="math notranslate nohighlight">\(X &lt; X_0\)</span>, у всех элементов в правом поддереве <span class="math notranslate nohighlight">\(X &gt; X_0\)</span>, а также и в левом, и в правом поддереве имеем: <span class="math notranslate nohighlight">\(Y &lt; Y_0\)</span>.</p>
+<p>Дерамиды были предложены Сиделем (Siedel) и Арагон (Aragon) в 1989 г.</p>
+</div>
+<div class="section" id="id1">
+<h1>Преимущества такой организации данных<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h1>
+<p>В том применении, которое мы рассматриваем (мы будем рассматривать дерамиды, поскольку декартово дерево - это фактически более общая структура данных), X’ы являются ключами (и одновременно значениями, хранящимися в структуре данных), а Y’и - называются приоритетами. Если бы приоритетов не было, то было бы обычное бинарное дерево поиска по X, и заданному набору X’ов могло бы соответствовать много деревьев, некоторые из которых являются вырожденными (например, в виде цепочки), а потому чрезвычайно медленными (основные операции выполнялись бы за <span class="math notranslate nohighlight">\(O(n)\)</span>).</p>
+<p>В то же время, приоритеты позволяют однозначно указать дерево, которое будет построено (разумеется, не зависящее от порядка добавления элементов) (это доказывается соответствующей теоремой). Теперь очевидно, что если выбирать приоритеты случайно, то этим мы добьёмся построения невырожденных деревьев в среднем случае, что обеспечит асимптотику <span class="math notranslate nohighlight">\(O(log(n))\)</span> в среднем. Отсюда и понятно ещё одно название этой структуры данных - рандомизированное бинарное дерево поиска.</p>
+</div>
+<div class="section" id="id2">
+<h1>Операции<a class="headerlink" href="#id2" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Итак, treap предоставляет следующие операции:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(Insert (X, Y)\)</span> - за <span class="math notranslate nohighlight">\(O(log(n))\)</span> в среднем. Выполняет добавление в дерево нового элемента. Возможен вариант, при котором значение приоритета <span class="math notranslate nohighlight">\(Y\)</span> не передаётся функции, а выбирается случайно (правда, нужно учесть, что оно не должно совпадать ни с каким другим <span class="math notranslate nohighlight">\(Y\)</span> в дереве).</p></li>
+<li><p><span class="math notranslate nohighlight">\(Search(X)\)</span> - за <span class="math notranslate nohighlight">\(O(log(n))\)</span> в среднем. Ищет элемент с указанным значением ключа <span class="math notranslate nohighlight">\(X\)</span>. Реализуется абсолютно так же, как и для обычного бинарного дерева поиска.</p></li>
+<li><p><span class="math notranslate nohighlight">\(Erase(X)\)</span> - за <span class="math notranslate nohighlight">\(O(log(n))\)</span> в среднем. Ищет элемент и удаляет его из дерева.</p></li>
+<li><p><span class="math notranslate nohighlight">\(Build (X1, ..., XN)\)</span> - за <span class="math notranslate nohighlight">\(O(N)\)</span> Строит дерево из списка значений.</p></li>
+<li><p><span class="math notranslate nohighlight">\(Union (T1, T2)\)</span> - за <span class="math notranslate nohighlight">\(O(m log(n / m))\)</span> в среднем. Объединяет два дерева, в предположении, что все элементы различны (впрочем, эту операцию можно реализовать с той же асимптотикой, если при объединении нужно удалять повторяющиеся элементы).</p></li>
+<li><p><span class="math notranslate nohighlight">\(Intersect(T1, T2)\)</span> - за <span class="math notranslate nohighlight">\(O(m log (n / m))\)</span> в среднем находит пересечение двух деревьев (т.е. их общие элементы).</p></li>
+</ul>
+</div>
+<div class="section" id="id3">
+<h1>Описание реализации<a class="headerlink" href="#id3" title="Ссылка на этот заголовок">¶</a></h1>
+<p>С точки зрения реализации, каждый элемент содержит в себе X, Y и указатели на левого L и правого R сына.</p>
+<p>Для реализации операций понадобится реализовать две вспомогательные операции: Split и Merge.</p>
+<p><span class="math notranslate nohighlight">\(Split(T, X)\)</span> - разделяет дерево <span class="math notranslate nohighlight">\(T\)</span> на два дерева <span class="math notranslate nohighlight">\(L\)</span> и <span class="math notranslate nohighlight">\(R\)</span> (которые являются возвращаемым значением) таким образом, что <span class="math notranslate nohighlight">\(L\)</span> содержит все элементы, меньшие по ключу <span class="math notranslate nohighlight">\(X\)</span>, а <span class="math notranslate nohighlight">\(R\)</span> содержит все элементы, большие <span class="math notranslate nohighlight">\(X\)</span>. Эта операция выполняется за <span class="math notranslate nohighlight">\(O(log(n))\)</span>. Реализация её довольно проста - очевидная рекурсия.</p>
+<p><span class="math notranslate nohighlight">\(Merge(T1, T2)\)</span> - объединяет два поддерева <span class="math notranslate nohighlight">\(T1\)</span> и <span class="math notranslate nohighlight">\(T2\)</span>, и возвращает это новое дерево. Эта операция также реализуется за <span class="math notranslate nohighlight">\(O(log(N))\)</span>. Она работает в предположении, что <span class="math notranslate nohighlight">\(T1\)</span> и <span class="math notranslate nohighlight">\(T2\)</span> обладают соответствующим порядком (все значения <span class="math notranslate nohighlight">\(X\)</span> в первом меньше значений <span class="math notranslate nohighlight">\(X\)</span> во втором). Таким образом, нам нужно объединить их так, чтобы не нарушить порядок по приоритетам <span class="math notranslate nohighlight">\(Y\)</span>. Для этого просто выбираем в качестве корня то дерево, у которого <span class="math notranslate nohighlight">\(Y\)</span> в корне больше, и рекурсивно вызываем себя от другого дерева и соответствующего сына выбранного дерева.</p>
+<p>Теперь очевидна реализация <span class="math notranslate nohighlight">\(Insert (X, Y)\)</span>. Сначала спускаемся по дереву (как в обычном бинарном дереве поиска по <span class="math notranslate nohighlight">\(X\)</span>), но останавливаемся на первом элементе, в котором значение приоритета оказалось меньше <span class="math notranslate nohighlight">\(Y\)</span>. Мы нашли позицию, куда будем вставлять наш элемент. Теперь вызываем <span class="math notranslate nohighlight">\(Split (X)\)</span> от найденного элемента (от элемента вместе со всем его поддеревом), и возвращаемые ею <span class="math notranslate nohighlight">\(L\)</span> и <span class="math notranslate nohighlight">\(R\)</span> записываем в качестве левого и правого сына добавляемого элемента.</p>
+<p>Также понятна и реализация <span class="math notranslate nohighlight">\(Erase(X)\)</span>. Спускаемся по дереву (как в обычном бинарном дереве поиска по <span class="math notranslate nohighlight">\(X\)</span>), ища удаляемый элемент. Найдя элемент, мы просто вызываем <span class="math notranslate nohighlight">\(Merge\)</span> от его левого и правого сыновей, и возвращаемое ею значение ставим на место удаляемого элемента.</p>
+<p>Операцию <span class="math notranslate nohighlight">\(Build\)</span> реализуем за:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(O(nlog(n))\)</span> просто с помощью последовательных вызовов <span class="math notranslate nohighlight">\(Insert\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(O(n)\)</span> с помощью стека TODO (task A pcms)</p></li>
+</ul>
+<p>Наконец, операция Union (T1, T2). Теоретически её асимптотика O (M log (N/M)), однако на практике она работает очень хорошо, вероятно, с весьма малой скрытой константой. Пусть, не теряя общности, T1-&gt;Y &gt; T2-&gt;Y, т.е. корень T1 будет корнем результата. Чтобы получить результат, нам нужно объединить деревья T1-&gt;L, T1-&gt;R и T2 в два таких дерева, чтобы их можно было сделать сыновьями T1. Для этого вызовем Split (T2, T1-&gt;X), тем самым мы разобъём T2 на две половинки L и R, которые затем рекурсивно объединим с сыновьями T1: Union (T1-&gt;L, L) и Union (T1-&gt;R, R), тем самым мы построим левое и правое поддеревья результата.</p>
+</div>
+<div class="section" id="id4">
+<h1>Реализация<a class="headerlink" href="#id4" title="Ссылка на этот заголовок">¶</a></h1>
+<img alt="https://i.imgur.com/g0kzedp.png" src="https://i.imgur.com/g0kzedp.png" />
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;bits/stdc++.h&gt;</span><span class="cp"></span>
+
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="k">typedef</span> <span class="kt">long</span> <span class="kt">long</span> <span class="n">ll</span><span class="p">;</span>
+
+<span class="k">struct</span> <span class="n">Node</span> <span class="p">{</span>
+    <span class="n">ll</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">n</span><span class="p">;</span>
+    <span class="n">Node</span> <span class="o">*</span><span class="n">L</span><span class="p">,</span> <span class="o">*</span><span class="n">R</span><span class="p">;</span>
+
+    <span class="n">Node</span><span class="p">(</span><span class="n">ll</span> <span class="n">x</span><span class="p">)</span> <span class="o">:</span> <span class="n">x</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">y</span><span class="p">(</span><span class="n">rand</span><span class="p">()),</span> <span class="n">L</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">R</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="p">{};</span>
+
+    <span class="n">Node</span><span class="p">(</span><span class="n">ll</span> <span class="n">x</span><span class="p">,</span> <span class="n">ll</span> <span class="n">y</span><span class="p">)</span> <span class="o">:</span> <span class="n">x</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">y</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">L</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">R</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="p">{};</span>
+
+    <span class="n">Node</span><span class="p">(</span><span class="n">ll</span> <span class="n">x</span><span class="p">,</span> <span class="n">ll</span> <span class="n">y</span><span class="p">,</span> <span class="n">ll</span> <span class="n">n</span><span class="p">)</span> <span class="o">:</span> <span class="n">x</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">y</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">n</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">L</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">R</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="p">{};</span>
+<span class="p">};</span>
+
+<span class="n">Node</span> <span class="o">*</span><span class="nf">merge</span><span class="p">(</span><span class="n">Node</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="n">Node</span> <span class="o">*</span><span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">a</span><span class="p">)</span> <span class="k">return</span> <span class="n">b</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">b</span><span class="p">)</span> <span class="k">return</span> <span class="n">a</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="o">-&gt;</span><span class="n">y</span> <span class="o">&lt;</span> <span class="n">b</span><span class="o">-&gt;</span><span class="n">y</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">a</span><span class="o">-&gt;</span><span class="n">R</span> <span class="o">=</span> <span class="n">merge</span><span class="p">(</span><span class="n">a</span><span class="o">-&gt;</span><span class="n">R</span><span class="p">,</span> <span class="n">b</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">a</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="n">b</span><span class="o">-&gt;</span><span class="n">L</span> <span class="o">=</span> <span class="n">merge</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="o">-&gt;</span><span class="n">L</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">b</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">pair</span><span class="o">&lt;</span><span class="n">Node</span> <span class="o">*</span><span class="p">,</span> <span class="n">Node</span> <span class="o">*&gt;</span> <span class="n">split</span><span class="p">(</span><span class="n">Node</span> <span class="o">*</span><span class="n">t</span><span class="p">,</span> <span class="n">ll</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">t</span><span class="p">)</span> <span class="k">return</span> <span class="p">{</span><span class="k">nullptr</span><span class="p">,</span> <span class="k">nullptr</span><span class="p">};</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">t</span><span class="o">-&gt;</span><span class="n">x</span> <span class="o">&lt;</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">auto</span> <span class="n">r</span> <span class="o">=</span> <span class="n">split</span><span class="p">(</span><span class="n">t</span><span class="o">-&gt;</span><span class="n">R</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span>
+        <span class="n">t</span><span class="o">-&gt;</span><span class="n">R</span> <span class="o">=</span> <span class="n">r</span><span class="p">.</span><span class="n">first</span><span class="p">;</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">t</span><span class="p">,</span> <span class="n">r</span><span class="p">.</span><span class="n">second</span><span class="p">};</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="k">auto</span> <span class="n">l</span> <span class="o">=</span> <span class="n">split</span><span class="p">(</span><span class="n">t</span><span class="o">-&gt;</span><span class="n">L</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span>
+        <span class="n">t</span><span class="o">-&gt;</span><span class="n">L</span> <span class="o">=</span> <span class="n">l</span><span class="p">.</span><span class="n">second</span><span class="p">;</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">l</span><span class="p">.</span><span class="n">first</span><span class="p">,</span> <span class="n">t</span><span class="p">};</span>
+    <span class="p">};</span>
+<span class="p">}</span>
+
+<span class="n">Node</span> <span class="o">*</span><span class="n">add</span><span class="p">(</span><span class="n">Node</span> <span class="o">*</span><span class="n">t</span><span class="p">,</span> <span class="n">ll</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">auto</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">split</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nf">merge</span><span class="p">(</span><span class="n">tmp</span><span class="p">.</span><span class="n">first</span><span class="p">,</span>
+                 <span class="n">merge</span><span class="p">(</span><span class="k">new</span> <span class="n">Node</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">tmp</span><span class="p">.</span><span class="n">second</span><span class="p">));</span>
+<span class="p">}</span>
+
+<span class="n">Node</span> <span class="o">*</span><span class="n">erase</span><span class="p">(</span><span class="n">Node</span> <span class="o">*</span><span class="n">t</span><span class="p">,</span> <span class="n">ll</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">auto</span> <span class="n">tmp1</span> <span class="o">=</span> <span class="n">split</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span>
+    <span class="k">auto</span> <span class="n">tmp2</span> <span class="o">=</span> <span class="n">split</span><span class="p">(</span><span class="n">tmp1</span><span class="p">.</span><span class="n">second</span><span class="p">,</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nf">merge</span><span class="p">(</span><span class="n">tmp1</span><span class="p">.</span><span class="n">first</span><span class="p">,</span> <span class="n">tmp2</span><span class="p">.</span><span class="n">second</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">bool</span> <span class="n">find</span><span class="p">(</span><span class="n">Node</span> <span class="o">*</span><span class="n">t</span><span class="p">,</span> <span class="n">ll</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">auto</span> <span class="n">tmp1</span> <span class="o">=</span> <span class="n">split</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span>
+    <span class="k">auto</span> <span class="n">tmp2</span> <span class="o">=</span> <span class="n">split</span><span class="p">(</span><span class="n">tmp1</span><span class="p">.</span><span class="n">second</span><span class="p">,</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="kt">bool</span> <span class="n">ans</span> <span class="o">=</span> <span class="n">tmp2</span><span class="p">.</span><span class="n">first</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">;</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">merge</span><span class="p">(</span><span class="n">tmp1</span><span class="p">.</span><span class="n">first</span><span class="p">,</span> <span class="n">merge</span><span class="p">(</span><span class="n">tmp2</span><span class="p">.</span><span class="n">first</span><span class="p">,</span> <span class="n">tmp2</span><span class="p">.</span><span class="n">second</span><span class="p">));</span>
+    <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">ll</span> <span class="n">next</span><span class="p">(</span><span class="n">Node</span> <span class="o">*</span><span class="n">root</span><span class="p">,</span> <span class="kt">int</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">pair</span> <span class="o">&lt;</span><span class="n">Node</span><span class="o">*</span><span class="p">,</span> <span class="n">Node</span><span class="o">*&gt;</span> <span class="n">t</span> <span class="o">=</span> <span class="n">split</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="n">Node</span> <span class="o">*</span><span class="n">cur</span> <span class="o">=</span> <span class="n">t</span><span class="p">.</span><span class="n">second</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">cur</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">){</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">cur</span><span class="o">-&gt;</span><span class="n">L</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">){</span>
+        <span class="n">cur</span> <span class="o">=</span> <span class="n">cur</span><span class="o">-&gt;</span><span class="n">L</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">root</span> <span class="o">=</span> <span class="n">merge</span><span class="p">(</span><span class="n">t</span><span class="p">.</span><span class="n">first</span><span class="p">,</span> <span class="n">t</span><span class="p">.</span><span class="n">second</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">cur</span><span class="o">-&gt;</span><span class="n">x</span><span class="p">;</span>
+<span class="p">}</span>
+
+
+<span class="n">ll</span> <span class="n">prev</span><span class="p">(</span><span class="n">Node</span> <span class="o">*</span><span class="n">root</span><span class="p">,</span> <span class="kt">int</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">pair</span> <span class="o">&lt;</span><span class="n">Node</span><span class="o">*</span><span class="p">,</span> <span class="n">Node</span><span class="o">*&gt;</span> <span class="n">t</span> <span class="o">=</span> <span class="n">split</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span>
+    <span class="n">Node</span> <span class="o">*</span><span class="n">cur</span> <span class="o">=</span> <span class="n">t</span><span class="p">.</span><span class="n">first</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">cur</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">){</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">cur</span> <span class="o">-&gt;</span> <span class="n">R</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">){</span>
+        <span class="n">cur</span> <span class="o">=</span> <span class="n">cur</span><span class="o">-&gt;</span><span class="n">R</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">root</span> <span class="o">=</span> <span class="n">merge</span><span class="p">(</span><span class="n">t</span><span class="p">.</span><span class="n">first</span><span class="p">,</span> <span class="n">t</span><span class="p">.</span><span class="n">second</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">cur</span><span class="o">-&gt;</span><span class="n">x</span><span class="p">;</span>
+<span class="p">}</span>
+
+
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">ios</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">srand</span><span class="p">(</span><span class="n">time</span><span class="p">(</span><span class="mi">0</span><span class="p">));</span>
+    <span class="n">string</span> <span class="n">s</span><span class="p">;</span>
+    <span class="n">ll</span> <span class="n">x</span><span class="p">;</span>
+    <span class="n">Node</span> <span class="o">*</span><span class="n">t</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">x</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">s</span> <span class="o">==</span> <span class="s">&quot;insert&quot;</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">find</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">))</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="n">add</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">s</span> <span class="o">==</span> <span class="s">&quot;exists&quot;</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">//find(t, x);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">find</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">))</span> <span class="p">{</span>
+                <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;true</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;false</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">s</span> <span class="o">==</span> <span class="s">&quot;next&quot;</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">auto</span> <span class="n">q</span> <span class="o">=</span> <span class="n">next</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">q</span> <span class="o">!=</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">q</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;none&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">s</span> <span class="o">==</span> <span class="s">&quot;delete&quot;</span><span class="p">){</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">find</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">))</span>
+               <span class="n">t</span> <span class="o">=</span> <span class="n">erase</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">s</span> <span class="o">==</span> <span class="s">&quot;prev&quot;</span><span class="p">){</span>
+            <span class="k">auto</span> <span class="n">q</span> <span class="o">=</span> <span class="n">prev</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">q</span> <span class="o">!=</span> <span class="n">x</span><span class="p">){</span>
+                <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">q</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;none</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, 9kin
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

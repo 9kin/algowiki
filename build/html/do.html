@@ -1,0 +1,332 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="ru" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="ru" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Дерево отрезков &mdash; документация algo 1</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script src="_static/translations.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html">
+          
+
+          
+            
+            <img src="_static/favicon.ico" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">Дерево отрезков</a></li>
+<li><a class="reference internal" href="#id2">Структура</a></li>
+<li><a class="reference internal" href="#id3">Построение дерева</a></li>
+<li><a class="reference internal" href="#id4">Запрос суммы</a></li>
+<li><a class="reference internal" href="#id5">Запрос обновления</a></li>
+<li><a class="reference internal" href="#l-r-o-log-n">Обновление значений на отрезке [l, r] за <span class="math notranslate nohighlight">\(O(log(n))\)</span></a></li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">algo</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Дерево отрезков</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/do.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="id1">
+<h1>Дерево отрезков<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h1>
+<p><span class="math notranslate nohighlight">\(O(log(n))\)</span> time, <span class="math notranslate nohighlight">\(4n\)</span> - memory</p>
+<p>Дерево отрезков — это структура данных которая может:</p>
+<ul class="simple">
+<li><p>за <span class="math notranslate nohighlight">\(O(log(n))\)</span>: - нахождение значения функции на отрезке <span class="math notranslate nohighlight">\([l, r]\)</span></p></li>
+<li><p>за <span class="math notranslate nohighlight">\(O(log(n))\)</span> - обновление значения элемента</p></li>
+</ul>
+<p>Прмер дерева на минимум:</p>
+<img alt="https://neerc.ifmo.ru/wiki/images/c/c4/Segment_tree.png" src="https://neerc.ifmo.ru/wiki/images/c/c4/Segment_tree.png" />
+</div>
+<div class="section" id="id2">
+<h1>Структура<a class="headerlink" href="#id2" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Структура представляет собой дерево, листьями которого являются элементы исходного массива. Другие вершины этого дерева имеют по <span class="math notranslate nohighlight">\(2\)</span> ребенка и содержат результат операции от своих детей (например минимум или сумму). Таким образом, корень содержит результат искомой функции от всего массива <span class="math notranslate nohighlight">\([0…n−1]\)</span>, левый ребёнок корня содержит результат функции на <span class="math notranslate nohighlight">\([0…\frac{n}{2}]\)</span>, а правый, соответственно результат на <span class="math notranslate nohighlight">\([\frac{n}{2}+1…n−1]\)</span>. И так далее, продвигаясь вглубь дерева.</p>
+</div>
+<div class="section" id="id3">
+<h1>Построение дерева<a class="headerlink" href="#id3" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Пусть исходный массив <span class="math notranslate nohighlight">\(a\)</span> состоит из <span class="math notranslate nohighlight">\(n\)</span> элементов. Для удобства построения увеличим длину массива <span class="math notranslate nohighlight">\(a\)</span> так, чтобы она равнялась ближайшей степени двойки, т.е. <span class="math notranslate nohighlight">\(2^k\)</span>, где <span class="math notranslate nohighlight">\(2^k⩾n\)</span>. Это сделано, для того чтобы не допустить обращение к несуществующим элементам массива при дальнейшем процессе построения. Пустые элементы необходимо заполнить нейтральными элементами моноида. Тогда для хранения дерева отрезков понадобится массив <span class="math notranslate nohighlight">\(t\)</span> из <span class="math notranslate nohighlight">\(2^k+1\)</span> элементов, поскольку в худшем случае количество вершин в дереве можно оценить суммой <span class="math notranslate nohighlight">\(n+\frac{n}{2}+\frac{n}{4}…+1&lt;2n\)</span>, где <span class="math notranslate nohighlight">\(n=2^k\)</span>. Таким образом, структура занимает линейную память.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>int size = 1 &lt;&lt; ((int) ceil(log2(n)));
+</pre></div>
+</div>
+<p>Удобно описывать эту операцию рекурсивно: мы запускаем процедуру построения от корня дерева отрезков, а сама процедура построения, если её вызвали не от листа, вызывает себя от каждого из двух сыновей и суммирует вычисленные значения, а если её вызвали от листа — то просто записывает в себя значение этого элемента массива.</p>
+<p>Асимптотика построения дерева отрезков составит, таким образом, <span class="math notranslate nohighlight">\(O(n)\)</span>.</p>
+</div>
+<div class="section" id="id4">
+<h1>Запрос суммы<a class="headerlink" href="#id4" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Рассмотрим теперь запрос суммы. На вход поступают два числа <span class="math notranslate nohighlight">\(l\)</span> и <span class="math notranslate nohighlight">\(r\)</span>, и мы должны за время <span class="math notranslate nohighlight">\(O (\log n)\)</span> посчитать сумму чисел на отрезке <span class="math notranslate nohighlight">\(a[l \ldots r]\)</span>.</p>
+<p>Для этого мы будем спускаться по построенному дереву отрезков, используя для подсчёта ответа посчитанные ранее суммы на каждой вершине дерева. Изначально мы встаём в корень дерева отрезков. Посмотрим, в какие из двух его сыновей попадает отрезок запроса <span class="math notranslate nohighlight">\([l \ldots r]\)</span> (напомним, что сыновья корня дерева отрезков — это отрезки <span class="math notranslate nohighlight">\([0 \ldots n/2]\)</span> и <span class="math notranslate nohighlight">\([n/2+1 \ldots n-1]\)</span>). Возможны два варианта: что отрезок <span class="math notranslate nohighlight">\([l \ldots r]\)</span> попадает только в одного сына корня, и что, наоборот, отрезок пересекается с обоими сыновьями.</p>
+<p>Первый случай прост: просто перейдём в того сына, в котором лежит наш отрезок-запрос, и применим описываемый здесь алгоритм к текущей вершине.</p>
+<p>Во втором же случае нам не остаётся других вариантов, кроме как перейти сначала в левого сына и посчитать ответ на запрос в нём, а затем — перейти в правого сына, посчитать в нём ответ и прибавить к нашему ответу. Иными словами, если левый сын представлял отрезок <span class="math notranslate nohighlight">\([l_1 \ldots r_1]\)</span>, а правый — отрезок <span class="math notranslate nohighlight">\([l_2 \ldots r_2]\)</span> (заметим, что <span class="math notranslate nohighlight">\(l_2 = r_1 + 1\)</span>), то мы перейдём в левого сына с запросом <span class="math notranslate nohighlight">\([l \ldots r_1]\)</span>, а в правого — с запросом <span class="math notranslate nohighlight">\([l_2 \ldots r]\)</span>.</p>
+<p>Итак, обработка запроса суммы представляет собой рекурсивную функцию, которая всякий раз вызывает себя либо от левого сына, либо от правого (не изменяя границы запроса в обоих случаях), либо от обоих сразу (при этом деля наш запрос на два соответствующих подзапроса). Однако рекурсивные вызовы будем делать не всегда: если текущий запрос совпал с границами отрезка в текущей вершине дерева отрезков, то в качестве ответа будем возвращать предвычисленное значение суммы на этом отрезке, записанное в дереве отрезков.</p>
+<p>Иными словами, вычисление запроса представляет собой спуск по дереву отрезков, который распространяется по всем нужным ветвям дерева, и для быстрой работы использующий уже посчитанные суммы по каждому отрезку в дереве отрезков.</p>
+<p><span class="math notranslate nohighlight">\(O(\log n)\)</span> потому что <span class="math notranslate nohighlight">\((\log n)\)</span> высота дерева</p>
+</div>
+<div class="section" id="id5">
+<h1>Запрос обновления<a class="headerlink" href="#id5" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Напомним, что запрос обновления получает на вход индекс <span class="math notranslate nohighlight">\(i\)</span> и значение <span class="math notranslate nohighlight">\(x\)</span>, и перестраивает дерево отрезков таким образом, чтобы оно соответствовало новому значению <span class="math notranslate nohighlight">\(a[i]=x\)</span>. Этот запрос должен также выполняться за время <span class="math notranslate nohighlight">\(O (\log n)\)</span>.</p>
+<p>Это более простой запрос по сравнению с запросом подсчёта суммы. Дело в том, что элемент <span class="math notranslate nohighlight">\(a[i]\)</span> участвует только в относительно небольшом числе вершин дерева отрезков: а именно, в <span class="math notranslate nohighlight">\(O (\log n)\)</span> вершинах — по одной с каждого уровня.</p>
+<p>Тогда понятно, что запрос обновления можно реализовать как рекурсивную функцию: ей передаётся текущая вершина дерева отрезков, и эта функция выполняет рекурсивный вызов от одного из двух своих сыновей (от того, который содержит позицию <span class="math notranslate nohighlight">\(i\)</span> в своём отрезке), а после этого — пересчитывает значение суммы в текущей вершине точно таким же образом, как мы это делали при построении дерева отрезков (т.е. как сумма значений по обоим сыновьям текущей вершины).</p>
+<p>Задача RSQ сумма на отрезке с обновлением одного элемента</p>
+<img alt="https://i.imgur.com/yVgsPbN.png" src="https://i.imgur.com/yVgsPbN.png" />
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;bits/stdc++.h&gt;</span><span class="cp"></span>
+
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="k">typedef</span> <span class="kt">long</span> <span class="kt">long</span> <span class="n">ll</span><span class="p">;</span>
+
+<span class="n">vector</span><span class="o">&lt;</span><span class="n">ll</span><span class="o">&gt;</span> <span class="n">a</span><span class="p">;</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="n">ll</span><span class="o">&gt;</span> <span class="n">t</span><span class="p">;</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="n">ll</span><span class="o">&gt;</span> <span class="n">p</span><span class="p">;</span>
+
+<span class="kt">void</span> <span class="nf">build</span><span class="p">(</span><span class="n">ll</span> <span class="n">v</span><span class="p">,</span> <span class="n">ll</span> <span class="n">l</span><span class="p">,</span> <span class="n">ll</span> <span class="n">r</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">l</span> <span class="o">==</span> <span class="n">r</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">t</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">l</span><span class="p">];</span>
+        <span class="k">return</span> <span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">ll</span> <span class="n">m</span> <span class="o">=</span> <span class="p">(</span><span class="n">l</span> <span class="o">+</span> <span class="n">r</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="n">build</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">v</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">m</span><span class="p">);</span>
+    <span class="n">build</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">v</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">m</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">r</span><span class="p">);</span>
+    <span class="n">t</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="mi">2</span> <span class="o">*</span> <span class="n">v</span><span class="p">]</span> <span class="o">+</span> <span class="n">t</span><span class="p">[</span><span class="mi">2</span> <span class="o">*</span> <span class="n">v</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
+<span class="p">}</span>
+
+<span class="n">ll</span> <span class="nf">get</span><span class="p">(</span><span class="n">ll</span> <span class="n">v</span><span class="p">,</span> <span class="n">ll</span> <span class="n">l</span><span class="p">,</span> <span class="n">ll</span> <span class="n">r</span><span class="p">,</span> <span class="n">ll</span> <span class="n">A</span><span class="p">,</span> <span class="n">ll</span> <span class="n">B</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">r</span> <span class="o">&lt;</span> <span class="n">A</span> <span class="o">||</span> <span class="n">l</span> <span class="o">&gt;</span> <span class="n">B</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">A</span> <span class="o">&lt;=</span> <span class="n">l</span> <span class="o">&amp;&amp;</span> <span class="n">r</span> <span class="o">&lt;=</span> <span class="n">B</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">t</span><span class="p">[</span><span class="n">v</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="n">ll</span> <span class="n">m</span> <span class="o">=</span> <span class="p">(</span><span class="n">l</span> <span class="o">+</span> <span class="n">r</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">get</span><span class="p">(</span><span class="n">v</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">)</span> <span class="o">+</span>
+           <span class="n">get</span><span class="p">(</span><span class="n">v</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">m</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">);</span>
+<span class="p">}</span>
+
+
+<span class="n">ll</span> <span class="nf">GET</span><span class="p">(</span><span class="n">ll</span> <span class="n">l</span><span class="p">,</span> <span class="n">ll</span> <span class="n">r</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">get</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">a</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">update</span><span class="p">(</span><span class="n">ll</span> <span class="n">v</span><span class="p">,</span> <span class="n">ll</span> <span class="n">l</span><span class="p">,</span> <span class="n">ll</span> <span class="n">r</span><span class="p">,</span> <span class="n">ll</span> <span class="n">A</span><span class="p">,</span> <span class="n">ll</span> <span class="n">B</span><span class="p">,</span> <span class="n">ll</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">r</span> <span class="o">&lt;</span> <span class="n">A</span> <span class="o">||</span> <span class="n">l</span> <span class="o">&gt;</span> <span class="n">B</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">l</span> <span class="o">==</span> <span class="n">r</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">t</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
+        <span class="n">a</span><span class="p">[</span><span class="n">l</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
+        <span class="k">return</span> <span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">ll</span> <span class="n">m</span> <span class="o">=</span> <span class="p">(</span><span class="n">l</span> <span class="o">+</span> <span class="n">r</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="n">update</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">v</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span>
+    <span class="n">update</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">v</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">m</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span>
+    <span class="n">t</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="mi">2</span> <span class="o">*</span> <span class="n">v</span><span class="p">]</span> <span class="o">+</span> <span class="n">t</span><span class="p">[</span><span class="mi">2</span> <span class="o">*</span> <span class="n">v</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">Set</span><span class="p">(</span><span class="n">ll</span> <span class="n">i</span><span class="p">,</span> <span class="n">ll</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">update</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span> <span class="n">a</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">ios</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">ll</span> <span class="n">n</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="p">((</span><span class="kt">int</span><span class="p">)</span> <span class="n">ceil</span><span class="p">(</span><span class="n">log2</span><span class="p">(</span><span class="n">n</span><span class="p">)));</span>
+    <span class="n">a</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">size</span><span class="p">);</span>
+    <span class="n">p</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">size</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+    <span class="n">t</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">size</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span><span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="n">build</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="n">string</span> <span class="n">command</span><span class="p">;</span>
+    <span class="n">ll</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">command</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">i</span> <span class="o">&gt;&gt;</span> <span class="n">x</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">command</span> <span class="o">==</span> <span class="s">&quot;sum&quot;</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">GET</span><span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="n">Set</span><span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="l-r-o-log-n">
+<h1>Обновление значений на отрезке [l, r] за <span class="math notranslate nohighlight">\(O(log(n))\)</span><a class="headerlink" href="#l-r-o-log-n" title="Ссылка на этот заголовок">¶</a></h1>
+<p>TODO</p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, 9kin
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

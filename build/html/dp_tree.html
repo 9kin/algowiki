@@ -1,0 +1,453 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="ru" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="ru" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Дп на поддеревьях &mdash; документация algo 1</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script src="_static/translations.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html">
+          
+
+          
+            
+            <img src="_static/favicon.ico" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">Дп на поддеревьях</a></li>
+<li><a class="reference internal" href="#o-v-e"><span class="math notranslate nohighlight">\(O(V + E)\)</span> Максимальное паросочетание в дереве</a></li>
+<li><a class="reference internal" href="#id2"><span class="math notranslate nohighlight">\(O(V + E)\)</span> Задача о независимом множестве</a><ul>
+<li><a class="reference internal" href="#id3">Невзвешанное дерево (вес 1)</a></li>
+<li><a class="reference internal" href="#id4">Взвешанное дерево</a></li>
+</ul>
+</li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">algo</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Дп на поддеревьях</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/dp_tree.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="id1">
+<h1>Дп на поддеревьях<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h1>
+</div>
+<div class="section" id="o-v-e">
+<h1><span class="math notranslate nohighlight">\(O(V + E)\)</span> Максимальное паросочетание в дереве<a class="headerlink" href="#o-v-e" title="Ссылка на этот заголовок">¶</a></h1>
+<ol class="arabic">
+<li><p>Состояние динамики:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>dp[u].no_take - максимальное парасочетание в поддереве в вершине u, не беря вершину в парасочентание</p></li>
+</ul>
+</div></blockquote>
+<ul class="simple">
+<li><p>dp[u].take - максимальное парасочетание в поддереве в вершине u, беря вершину в парасочентание</p></li>
+</ul>
+</li>
+<li><p>База:</p>
+<blockquote>
+<div><p>dp[листа].take = 0, dp[листа].take = 0;</p>
+</div></blockquote>
+</li>
+<li><p>Переходы:</p>
+<blockquote>
+<div><p><span class="math notranslate nohighlight">\(v\)</span> - вершина, <span class="math notranslate nohighlight">\(u\)</span> - ребёнок</p>
+<ul class="simple">
+<li><p>dp[u].no_take += max(dp[v].take, dp[v].no_take); - без разницы какое состояние взять</p></li>
+<li><p>dp[u].take = dp[u].no_take + dp[v].no_take - max(dp[v].take, dp[v].no_take); - надо взять вершину <span class="math notranslate nohighlight">\(u\)</span> с <span class="math notranslate nohighlight">\(v\)</span> а с отальными соеденяем</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Где ответ:</p></li>
+</ol>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>max((ll) best_matcing[0].take, (ll) best_matcing[0].no_take);
+</pre></div>
+</div>
+<p>code from gate ЛКЛ 2019 - Параллель B - День 03 (ДП по подмножествам и поддеревьям)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;bits/stdc++.h&gt;</span><span class="cp"></span>
+
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="k">typedef</span> <span class="kt">long</span> <span class="kt">long</span> <span class="n">ll</span><span class="p">;</span>
+
+<span class="k">const</span> <span class="n">ll</span> <span class="n">INF</span> <span class="o">=</span> <span class="p">(</span><span class="n">ll</span><span class="p">)</span> <span class="mf">1e18</span><span class="p">;</span>
+
+<span class="k">struct</span> <span class="n">three</span> <span class="p">{</span>
+    <span class="n">ll</span> <span class="n">no_take</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">take</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">pred</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">ll</span><span class="o">&gt;&gt;</span> <span class="n">graph</span><span class="p">;</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span> <span class="n">used</span><span class="p">;</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="n">three</span><span class="o">&gt;</span> <span class="n">best_matcing</span><span class="p">;</span>
+
+<span class="kt">void</span> <span class="nf">calculate_tree_best_matcing</span><span class="p">(</span><span class="n">ll</span> <span class="n">vertex</span><span class="p">,</span> <span class="n">ll</span> <span class="n">prev_vertex</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">graph</span><span class="p">[</span><span class="n">vertex</span><span class="p">].</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">new_vertex</span> <span class="p">:</span> <span class="n">graph</span><span class="p">[</span><span class="n">vertex</span><span class="p">])</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">new_vertex</span> <span class="o">!=</span> <span class="n">prev_vertex</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">calculate_tree_best_matcing</span><span class="p">(</span><span class="n">new_vertex</span><span class="p">,</span> <span class="n">vertex</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">new_vertex</span> <span class="p">:</span> <span class="n">graph</span><span class="p">[</span><span class="n">vertex</span><span class="p">])</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">new_vertex</span> <span class="o">!=</span> <span class="n">prev_vertex</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">best_matcing</span><span class="p">[</span><span class="n">vertex</span><span class="p">].</span><span class="n">no_take</span> <span class="o">+=</span> <span class="n">max</span><span class="p">(</span><span class="n">best_matcing</span><span class="p">[</span><span class="n">new_vertex</span><span class="p">].</span><span class="n">no_take</span><span class="p">,</span> <span class="n">best_matcing</span><span class="p">[</span><span class="n">new_vertex</span><span class="p">].</span><span class="n">take</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">pair</span><span class="o">&lt;</span><span class="n">ll</span><span class="p">,</span> <span class="n">ll</span><span class="o">&gt;</span> <span class="n">ans</span> <span class="o">=</span> <span class="p">{</span><span class="o">-</span><span class="n">INF</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">};</span>
+    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">new_vertex</span> <span class="p">:</span> <span class="n">graph</span><span class="p">[</span><span class="n">vertex</span><span class="p">])</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">new_vertex</span> <span class="o">!=</span> <span class="n">prev_vertex</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">ll</span> <span class="n">curent_ans</span> <span class="o">=</span>
+                    <span class="n">best_matcing</span><span class="p">[</span><span class="n">vertex</span><span class="p">].</span><span class="n">no_take</span> <span class="o">+</span> <span class="n">best_matcing</span><span class="p">[</span><span class="n">new_vertex</span><span class="p">].</span><span class="n">no_take</span> <span class="o">-</span>
+                    <span class="n">max</span><span class="p">(</span><span class="n">best_matcing</span><span class="p">[</span><span class="n">new_vertex</span><span class="p">].</span><span class="n">no_take</span><span class="p">,</span> <span class="n">best_matcing</span><span class="p">[</span><span class="n">new_vertex</span><span class="p">].</span><span class="n">take</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">curent_ans</span> <span class="o">&gt;</span> <span class="n">ans</span><span class="p">.</span><span class="n">first</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">ans</span> <span class="o">=</span> <span class="p">{</span><span class="n">curent_ans</span><span class="p">,</span> <span class="n">new_vertex</span><span class="p">};</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">best_matcing</span><span class="p">[</span><span class="n">vertex</span><span class="p">].</span><span class="n">pred</span> <span class="o">=</span> <span class="n">ans</span><span class="p">.</span><span class="n">second</span><span class="p">;</span>
+    <span class="n">best_matcing</span><span class="p">[</span><span class="n">vertex</span><span class="p">].</span><span class="n">take</span> <span class="o">=</span> <span class="n">ans</span><span class="p">.</span><span class="n">first</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">print</span><span class="p">(</span><span class="n">ll</span> <span class="n">vertex</span><span class="p">,</span> <span class="n">ll</span> <span class="n">prev_vertex</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">new_vertex</span> <span class="p">:</span> <span class="n">graph</span><span class="p">[</span><span class="n">vertex</span><span class="p">])</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">new_vertex</span> <span class="o">!=</span> <span class="n">prev_vertex</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">best_matcing</span><span class="p">[</span><span class="n">vertex</span><span class="p">].</span><span class="n">pred</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">best_matcing</span><span class="p">[</span><span class="n">vertex</span><span class="p">].</span><span class="n">pred</span> <span class="o">==</span> <span class="n">new_vertex</span> <span class="o">&amp;&amp;</span>
+                <span class="n">best_matcing</span><span class="p">[</span><span class="n">vertex</span><span class="p">].</span><span class="n">take</span> <span class="o">&gt;</span> <span class="n">best_matcing</span><span class="p">[</span><span class="n">vertex</span><span class="p">].</span><span class="n">no_take</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">vertex</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">new_vertex</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">print</span><span class="p">(</span><span class="n">new_vertex</span><span class="p">,</span> <span class="n">vertex</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">ll</span> <span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span> <span class="o">&gt;&gt;</span> <span class="n">m</span><span class="p">;</span>
+    <span class="n">used</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="nb">false</span><span class="p">);</span>
+    <span class="n">best_matcing</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+    <span class="n">graph</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">a</span> <span class="o">&gt;&gt;</span> <span class="n">b</span><span class="p">;</span>
+        <span class="n">a</span><span class="o">--</span><span class="p">,</span> <span class="n">b</span><span class="o">--</span><span class="p">;</span>
+        <span class="n">graph</span><span class="p">[</span><span class="n">a</span><span class="p">].</span><span class="n">push_back</span><span class="p">(</span><span class="n">b</span><span class="p">);</span>
+        <span class="n">graph</span><span class="p">[</span><span class="n">b</span><span class="p">].</span><span class="n">push_back</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">calculate_tree_best_matcing</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">max</span><span class="p">((</span><span class="n">ll</span><span class="p">)</span> <span class="n">best_matcing</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">take</span><span class="p">,</span> <span class="p">(</span><span class="n">ll</span><span class="p">)</span> <span class="n">best_matcing</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">no_take</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+    <span class="n">print</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id2">
+<h1><span class="math notranslate nohighlight">\(O(V + E)\)</span> Задача о независимом множестве<a class="headerlink" href="#id2" title="Ссылка на этот заголовок">¶</a></h1>
+<ol class="arabic">
+<li><p>Состояние динамики:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>dp[u][0] - максимальное множество без вершины <span class="math notranslate nohighlight">\(u\)</span></p></li>
+<li><p>dp[u][1] - максимальное множество с вершиной <span class="math notranslate nohighlight">\(u\)</span></p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>База:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>нету</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Переходы:</p>
+<blockquote>
+<div><p><span class="math notranslate nohighlight">\(v\)</span> - дети вершины <span class="math notranslate nohighlight">\(u\)</span></p>
+</div></blockquote>
+<ul class="simple">
+<li><p>dp[u][0] = sum(max(dp[v][0], dp[v][1]))</p></li>
+<li><p>dp[u][1] = sum(dp[v][0]) + 1</p></li>
+</ul>
+</li>
+<li><p>Где ответ:</p></li>
+</ol>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>max((ll) dp[0][0], (ll) dp[0][1]);
+</pre></div>
+</div>
+<div class="section" id="id3">
+<h2>Невзвешанное дерево (вес 1)<a class="headerlink" href="#id3" title="Ссылка на этот заголовок">¶</a></h2>
+<img alt="https://i.imgur.com/7eBP9Pj.png" src="https://i.imgur.com/7eBP9Pj.png" />
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;bits/stdc++.h&gt;</span><span class="cp"></span>
+
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="k">typedef</span> <span class="kt">long</span> <span class="kt">long</span> <span class="n">ll</span><span class="p">;</span>
+
+<span class="n">vector</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span> <span class="n">used</span><span class="p">;</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">ll</span><span class="p">,</span> <span class="n">ll</span><span class="o">&gt;&gt;</span> <span class="n">dp</span><span class="p">;</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">ll</span><span class="o">&gt;&gt;</span> <span class="n">v</span><span class="p">;</span>
+
+<span class="kt">void</span> <span class="nf">dfs</span><span class="p">(</span><span class="n">ll</span> <span class="n">u</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">used</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">q</span> <span class="p">:</span> <span class="n">v</span><span class="p">[</span><span class="n">u</span><span class="p">])</span> <span class="p">{</span>
+        <span class="n">dfs</span><span class="p">(</span><span class="n">q</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">ll</span> <span class="n">sum1</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">sum0</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">q</span><span class="p">:</span> <span class="n">v</span><span class="p">[</span><span class="n">u</span><span class="p">])</span> <span class="p">{</span>
+        <span class="n">dp</span><span class="p">[</span><span class="n">u</span><span class="p">].</span><span class="n">second</span> <span class="o">+=</span> <span class="n">dp</span><span class="p">[</span><span class="n">q</span><span class="p">].</span><span class="n">first</span><span class="p">;</span>
+        <span class="n">dp</span><span class="p">[</span><span class="n">u</span><span class="p">].</span><span class="n">first</span> <span class="o">+=</span> <span class="n">max</span><span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">q</span><span class="p">].</span><span class="n">first</span><span class="p">,</span> <span class="n">dp</span><span class="p">[</span><span class="n">q</span><span class="p">].</span><span class="n">second</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">dp</span><span class="p">[</span><span class="n">u</span><span class="p">].</span><span class="n">second</span><span class="o">++</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">ios</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">ll</span> <span class="n">n</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">root</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span><span class="p">;</span>
+    <span class="n">used</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+    <span class="n">dp</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+    <span class="n">v</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">x</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">root</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="n">x</span><span class="o">--</span><span class="p">;</span>
+            <span class="n">v</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">push_back</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">dfs</span><span class="p">(</span><span class="n">root</span><span class="p">);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">max</span><span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">root</span><span class="p">].</span><span class="n">first</span><span class="p">,</span> <span class="n">dp</span><span class="p">[</span><span class="n">root</span><span class="p">].</span><span class="n">second</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id4">
+<h2>Взвешанное дерево<a class="headerlink" href="#id4" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Добавим в случае dp[u].second += w[u];</p>
+<img alt="https://i.imgur.com/aiwhCMB.png" src="https://i.imgur.com/aiwhCMB.png" />
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;bits/stdc++.h&gt;</span><span class="cp"></span>
+
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="k">typedef</span> <span class="kt">long</span> <span class="kt">long</span> <span class="n">ll</span><span class="p">;</span>
+
+<span class="n">vector</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span> <span class="n">used</span><span class="p">;</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">ll</span><span class="p">,</span> <span class="n">ll</span><span class="o">&gt;&gt;</span> <span class="n">dp</span><span class="p">;</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">ll</span><span class="o">&gt;&gt;</span> <span class="n">v</span><span class="p">;</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="n">ll</span><span class="o">&gt;</span> <span class="n">w</span><span class="p">;</span>
+
+<span class="kt">void</span> <span class="nf">dfs</span><span class="p">(</span><span class="n">ll</span> <span class="n">u</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">used</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">q</span> <span class="p">:</span> <span class="n">v</span><span class="p">[</span><span class="n">u</span><span class="p">])</span> <span class="p">{</span>
+        <span class="n">dfs</span><span class="p">(</span><span class="n">q</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">ll</span> <span class="n">sum1</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">sum0</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">q</span><span class="p">:</span> <span class="n">v</span><span class="p">[</span><span class="n">u</span><span class="p">])</span> <span class="p">{</span>
+        <span class="n">dp</span><span class="p">[</span><span class="n">u</span><span class="p">].</span><span class="n">second</span> <span class="o">+=</span> <span class="n">dp</span><span class="p">[</span><span class="n">q</span><span class="p">].</span><span class="n">first</span><span class="p">;</span>
+        <span class="n">dp</span><span class="p">[</span><span class="n">u</span><span class="p">].</span><span class="n">first</span> <span class="o">+=</span> <span class="n">max</span><span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">q</span><span class="p">].</span><span class="n">first</span><span class="p">,</span> <span class="n">dp</span><span class="p">[</span><span class="n">q</span><span class="p">].</span><span class="n">second</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">dp</span><span class="p">[</span><span class="n">u</span><span class="p">].</span><span class="n">second</span> <span class="o">+=</span> <span class="n">w</span><span class="p">[</span><span class="n">u</span><span class="p">];</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">ios</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">ll</span> <span class="n">n</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">y</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span><span class="p">;</span>
+    <span class="n">used</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+    <span class="n">dp</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+    <span class="n">v</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+    <span class="n">w</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="n">y</span><span class="p">;</span>
+        <span class="n">w</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">root</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="n">x</span><span class="o">--</span><span class="p">;</span>
+            <span class="n">v</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">push_back</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">dfs</span><span class="p">(</span><span class="n">root</span><span class="p">);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">max</span><span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">root</span><span class="p">].</span><span class="n">first</span><span class="p">,</span> <span class="n">dp</span><span class="p">[</span><span class="n">root</span><span class="p">].</span><span class="n">second</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, 9kin
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

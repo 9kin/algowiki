@@ -1,0 +1,266 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="ru" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="ru" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Декартово дерево по неявному ключу &mdash; документация algo 1</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script src="_static/translations.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html">
+          
+
+          
+            
+            <img src="_static/favicon.ico" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">Декартово дерево по неявному ключу</a></li>
+<li><a class="reference internal" href="#id2">Основная идея</a></li>
+<li><a class="reference internal" href="#x">Ключ X</a></li>
+<li><a class="reference internal" href="#id3">Вспомогательная величина С</a></li>
+<li><a class="reference internal" href="#id4">Операции, поддерживающие структуру декартова дерева</a></li>
+<li><a class="reference internal" href="#split">Split</a></li>
+<li><a class="reference internal" href="#merge">Merge</a></li>
+<li><a class="reference internal" href="#c">Поддержание корректности значений C</a></li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">algo</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Декартово дерево по неявному ключу</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/ImplicedTreap.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="id1">
+<h1>Декартово дерево по неявному ключу<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h1>
+</div>
+<div class="section" id="id2">
+<h1>Основная идея<a class="headerlink" href="#id2" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Возьмем структуру данных динамический массив. В её стандартной реализации мы умеем добавлять элемент в конец вектора, узнавать значение элемента, стоящего на определенной позиции, изменять элемент по номеру и удалять последний элемент. Предположим, что нам необходима структура данных с вышеуказанными свойствами, а также с операциями: добавить элемент в любое место (с соответствующим изменением нумерации элементов) и удалить любой элемент (также с соответствующим изменением нумерации). Такую структуру можно реализовать на базе декартового дерева, результат часто называют декартово дерево по неявному ключу (англ. Treap with implicit key).</p>
+</div>
+<div class="section" id="x">
+<h1>Ключ X<a class="headerlink" href="#x" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Как известно, декартово дерево — это структура данных, объединяющая в себе бинарное дерево поиска и бинарную кучу. При реализации же декартова дерева по неявному ключу модифицируем эту структуру. А именно, оставим в нем только приоритет <span class="math notranslate nohighlight">\(Y\)</span>, а вместо ключа <span class="math notranslate nohighlight">\(X\)</span> будем использовать следующую величину: * количество элементов в нашей структуре, находящихся левее нашего элемента*. Иначе говоря, будем считать ключом порядковый номер нашего элемента в дереве, уменьшенный на единицу.</p>
+<p>Заметим, что при этом сохранится структура двоичного дерева поиска по этому ключу (то есть модифицированное декартово дерево так и останется декартовым деревом). Однако, с этим подходом появляется проблема: операции добавления и удаления элемента могут поменять нумерацию, и при наивной реализации на изменение всех ключей потребуется <span class="math notranslate nohighlight">\(O(n)\)</span> времени, где <span class="math notranslate nohighlight">\(n\)</span> — количество элементов в дереве.</p>
+</div>
+<div class="section" id="id3">
+<h1>Вспомогательная величина С<a class="headerlink" href="#id3" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Решается эта проблема довольно просто. Основная идея заключается в том, что такой ключ <span class="math notranslate nohighlight">\(X\)</span> сам по себе нигде не хранится. Вместо него будем хранить вспомогательную величину <span class="math notranslate nohighlight">\(C\)</span>: * количество вершин в поддереве нашей вершины * (в поддерево включается и сама вершина). Обратим внимание, что все операции с обычным декартовым деревом делались сверху. Также заметим, что если по пути от корня до некой вершины просуммировать все такие величины в левых поддеревьях, в которые мы не пошли, увеличенные на единицу, то придя в саму вершину и добавив к этой величине количество элементов в её левом поддереве, мы получим как раз ее ключ <span class="math notranslate nohighlight">\(X\)</span>.</p>
+<img alt="_images/ImpicedTreap.png" src="_images/ImpicedTreap.png" />
+</div>
+<div class="section" id="id4">
+<h1>Операции, поддерживающие структуру декартова дерева<a class="headerlink" href="#id4" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Структура обычного декартова дерева поддерживается с помощью двух операций: <span class="math notranslate nohighlight">\(split\)</span> — разбиение одного декартова дерева на два таких, что в одном ключ <span class="math notranslate nohighlight">\(X\)</span> меньше, чем заданное значение, а в другом — больше, и <span class="math notranslate nohighlight">\(merge\)</span> — слияние двух деревьев, в одном из которых все ключи <span class="math notranslate nohighlight">\(X\)</span> меньше, чем во втором. С учетом отличий декартова дерева по неявному ключу от обычного, операции теперь будут описываться так: <span class="math notranslate nohighlight">\(split(root,t)\)</span> — разбиение дерева на два так, что в левом окажется ровно t вершин, и <span class="math notranslate nohighlight">\(merge(root1,root)\)</span> — слияние двух любых деревьев, соответственно.</p>
+</div>
+<div class="section" id="split">
+<h1>Split<a class="headerlink" href="#split" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Пусть процедура <span class="math notranslate nohighlight">\(split\)</span> запущена в корне дерева с требованием отрезать от дерева k вершин. Также известно, что в левом поддереве вершины находится <span class="math notranslate nohighlight">\(l\)</span> вершин, а в правом <span class="math notranslate nohighlight">\(r\)</span>. Рассмотрим все возможные случаи:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(l&gt;=k\)</span>. В этом случае нужно рекурсивно запустить процедуру split от левого сына с тем же параметром <span class="math notranslate nohighlight">\(k\)</span>. При этом новым левым сыном корня станет правая часть ответа рекурсивной процедуры, а правой частью ответа станет корень.</p></li>
+<li><p><span class="math notranslate nohighlight">\(l&lt;k\)</span> Случай симметричен предыдущему. Рекурсивно запустим процедуру split от правого сына с параметром <span class="math notranslate nohighlight">\(k−l−1\)</span>. При этом новым правым сыном корня станет левая часть ответа рекурсивной процедуры, а левой частью ответа станет корень.</p></li>
+</ul>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>pair&lt;Node *, Node *&gt; split(Node *t, ll k) {
+    if (!t) return {nullptr, nullptr};
+    int l = t -&gt; left -&gt; size;
+    if (l &gt;= k) {
+        auto result = split(t -&gt; left, k);
+        auto t1 = result.first;
+        auto t2 = result.second;
+        t -&gt; left = t2;
+        update_size(t);
+        return {t1, t};
+    } else {
+        auto result = split(t -&gt; right, k - l - 1);
+        auto t1 = result.first;
+        auto t2 = result.second;
+        t -&gt; right = t1;
+        update_size(t);
+        return {t, t2};
+    }
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="merge">
+<h1>Merge<a class="headerlink" href="#merge" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Посмотрим любую из реализаций процедуры merge. Заметим, что в ней программа ни разу не обращается к ключу <span class="math notranslate nohighlight">\(X\)</span>. Поэтому реализация процедуры merge для декартова дерева по неявному ключу вообще не будет отличаться от реализации той же процедуры в обычном декартовом дереве.</p>
+</div>
+<div class="section" id="c">
+<h1>Поддержание корректности значений C<a class="headerlink" href="#c" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Единственное действие, обеспечивающее корректность этих значений заключается в том, что после любого действия с детьми вершины нужно записать в ее поле <span class="math notranslate nohighlight">\(C\)</span> сумму этих значений в ее новых детях, увеличенную на единицу.</p>
+<p>Псевдокод:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>void update(Treap t)
+  t.size = 1 + t.left.size + t.right.size
+</pre></div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, 9kin
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

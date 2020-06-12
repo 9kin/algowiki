@@ -1,0 +1,260 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="ru" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="ru" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Дерево Фенвика &mdash; документация algo 1</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script src="../_static/translations.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Алфавитный указатель" href="../genindex.html" />
+    <link rel="search" title="Поиск" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html">
+          
+
+          
+            
+            <img src="../_static/favicon.ico" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">Дерево Фенвика</a></li>
+<li><a class="reference internal" href="#id2">Описание</a></li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">algo</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Дерево Фенвика</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/data_structures/fenwick_tree.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="id1">
+<h1>Дерево Фенвика<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Дерево Фенвика - это структура данных, дерево на массиве, обладающее следующими свойствами:</p>
+<ol class="arabic simple">
+<li><p>позволяет вычислять значение некоторой обратимой операции <span class="math notranslate nohighlight">\(G\)</span> на любом отрезке <span class="math notranslate nohighlight">\([L; R]\)</span> за время <span class="math notranslate nohighlight">\(O(log(n)\)</span>;</p></li>
+<li><p>позволяет изменять значение любого элемента за <span class="math notranslate nohighlight">\(O(log(n)\)</span>;</p></li>
+<li><p>требует <span class="math notranslate nohighlight">\(O(n)\)</span> памяти, а точнее, ровно столько же, сколько и массив из <span class="math notranslate nohighlight">\(O(n)\)</span> элементов;</p></li>
+<li><p>легко обобщается на случай многомерных массивов.</p></li>
+</ol>
+<p>Наиболее распространённое применение дерева Фенвика - для вычисления суммы на отрезке, т.е. функция <span class="math notranslate nohighlight">\(G (X1, ..., Xk) = X1 + ... + Xk\)</span>.</p>
+<p>Дерево Фенвика было впервые описано в статье «A new data structure for cumulative frequency tables» (Peter M. Fenwick, 1994).</p>
+</div>
+<div class="section" id="id2">
+<h1>Описание<a class="headerlink" href="#id2" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Для простоты описания мы предполагаем, что операция <span class="math notranslate nohighlight">\(G\)</span>, по которой мы строим дерево, - это сумма.</p>
+<p>Пусть дан массив <span class="math notranslate nohighlight">\(a[0..N-1]\)</span>. Дерево Фенвика - массив <span class="math notranslate nohighlight">\(T[0..N-1]\)</span>, в каждом элементе которого хранится сумма некоторых элементов массива <span class="math notranslate nohighlight">\(a\)</span>:</p>
+<p><span class="math notranslate nohighlight">\(T_i\)</span> = сумма <span class="math notranslate nohighlight">\(A_j\)</span> для всех <span class="math notranslate nohighlight">\(F(i) &lt;= j &lt;= i\)</span>,
+где <span class="math notranslate nohighlight">\(F(i)\)</span> - некоторая функция, которую мы определим несколько позже.</p>
+<p>Теперь мы уже можем написать псевдокод для функции вычисления суммы на отрезке <span class="math notranslate nohighlight">\([0; R]\)</span> и для функции изменения ячейки:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>int f(int x) {
+   return x &amp; (x + 1);
+}
+
+int h(int x) {
+    return x | (x + 1);
+}
+
+ll sum(int index) {
+   ll result = 0;
+   while (index &gt;= 0) {
+      result += fenwick[index];
+      index = f(index) - 1;
+   }
+   return result;
+}
+
+void edit(int index, ll element) {
+   int a_index = index;
+   while (index &lt; fenwick.size()) {
+      fenwick[index] += (element - a[a_index]);
+      index = h(index);
+   }
+}
+</pre></div>
+</div>
+<p>Функция <span class="math notranslate nohighlight">\(sum\)</span> работает следующим образом. Вместо того чтобы идти по всем элементам массива <span class="math notranslate nohighlight">\(a\)</span>, она движется по массиву <span class="math notranslate nohighlight">\(t\)</span>, делая «прыжки» через отрезки там, где это возможно. Сначала она прибавляет к ответу значение суммы на отрезке <span class="math notranslate nohighlight">\([F(R); R]\)</span>, затем берёт сумму на отрезке <span class="math notranslate nohighlight">\([F(F(R)-1); F(R)-1]\)</span>, и так далее, пока не дойдёт до нуля.</p>
+<p>Функция <span class="math notranslate nohighlight">\(inc\)</span> движется в обратную сторону - в сторону увеличения индексов, обновляя значения суммы <span class="math notranslate nohighlight">\(T_j\)</span> только для тех позиций, для которых это нужно, т.е. для всех <span class="math notranslate nohighlight">\(j\)</span> для которых <span class="math notranslate nohighlight">\(F(j) &lt;= i &lt;= j\)</span>.</p>
+<p>Очевидно, что от выбора функции <span class="math notranslate nohighlight">\(F\)</span> будет зависеть скорость выполнения обеих операций. Сейчас мы рассмотрим функцию, которая позволит достичь логарифмической производительности в обоих случаях.</p>
+<p>Определим значение <span class="math notranslate nohighlight">\(F(X)\)</span> следующим образом. Рассмотрим двоичную запись этого числа и посмотрим на его младший бит. Если он равен нулю, то <span class="math notranslate nohighlight">\(F(X) = X\)</span>. Иначе двоичное представление числа <span class="math notranslate nohighlight">\(X\)</span> оканчивается на группу из одной или нескольких единиц. Заменим все единицы из этой группы на нули, и присвоим полученное число значению функции <span class="math notranslate nohighlight">\(F(X)\)</span>.</p>
+<p>Этому довольно сложному описанию соответствует очень простая формула:
+.. math:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">F</span><span class="p">(</span><span class="n">X</span><span class="p">)</span> <span class="o">=</span> <span class="n">X</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">X</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>где <span class="math notranslate nohighlight">\(\&amp;\)</span> - это операция побитового логического «И».</p>
+<p>Нетрудно убедиться, что эта формула соответствует словесному описанию функции, данному выше.</p>
+<p>Нам осталось только научиться быстро находить такие числа <span class="math notranslate nohighlight">\(j\)</span>, для которых <span class="math notranslate nohighlight">\(F(j) &lt;= i &lt;= j\)</span>.</p>
+<p>Однако нетрудно убедиться в том, что все такие числа <span class="math notranslate nohighlight">\(j\)</span> последовательными заменами самого правого (самого младшего) нуля в двоичном представлении. Например, для <span class="math notranslate nohighlight">\(i = 10\)</span> мы получим, что <span class="math notranslate nohighlight">\(j = 11, 15, 31, 63\)</span> и т.д.</p>
+<p>Как ни странно, такой операции (замена самого младшего нуля на единицу) также соответствует очень простая формула:</p>
+<div class="math notranslate nohighlight">
+\[H(X) = X | (X+1)\]</div>
+<p>где <span class="math notranslate nohighlight">\(|\)</span> - это операция побитового логического «ИЛИ».</p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, 9kin
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

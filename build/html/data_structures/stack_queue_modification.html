@@ -1,0 +1,323 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="ru" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="ru" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Модификация стека и очереди для нахождения минимума за \(O (1)\) &mdash; документация algo 1</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script src="../_static/translations.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Алфавитный указатель" href="../genindex.html" />
+    <link rel="search" title="Поиск" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html">
+          
+
+          
+            
+            <img src="../_static/favicon.ico" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">Модификация стека и очереди для нахождения минимума за <span class="math notranslate nohighlight">\(O (1)\)</span></a><ul>
+<li><a class="reference internal" href="#id1">Модификация стека</a></li>
+<li><a class="reference internal" href="#id2">Модификация очереди. Способ 1</a></li>
+<li><a class="reference internal" href="#id3">Модификация очереди. (Улучшенный 1)</a></li>
+</ul>
+</li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">algo</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Модификация стека и очереди для нахождения минимума за <span class="math notranslate nohighlight">\(O (1)\)</span></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/data_structures/stack_queue_modification.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="o-1">
+<h1>Модификация стека и очереди для нахождения минимума за <span class="math notranslate nohighlight">\(O (1)\)</span><a class="headerlink" href="#o-1" title="Ссылка на этот заголовок">¶</a></h1>
+<div class="section" id="id1">
+<h2>Модификация стека<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Мы хотим изменить структуру данных стека таким образом, чтобы можно было найти наименьший элемент в стеке за время O(1), сохраняя при этом одинаковое асимптотическое поведение для добавления и удаления элементов из стека. Быстрое напоминание, на стеке мы только добавляем и удаляем элементы на одном конце.</p>
+<p>Для этого мы будем не только хранить элементы в стеке, но и хранить их попарно: сам элемент и минимум в стеке, начиная с этого элемента и ниже.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>stack&lt;pair&lt;int, int&gt;&gt; st;
+</pre></div>
+</div>
+<p>Понятно, что минимум - <strong>stack.top().second</strong>.</p>
+<p>Реализация:</p>
+<ul>
+<li><p>Добавление элемента:</p>
+<blockquote>
+<div><div class="highlight-text notranslate"><div class="highlight"><pre><span></span>int new_min = st.empty() ? new_elem : min(new_elem, st.top().second);
+st.push({new_elem, new_min});
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Извлечение элемента:</p>
+<blockquote>
+<div><div class="highlight-text notranslate"><div class="highlight"><pre><span></span>int removed_element = st.top().first;
+st.pop();
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Нахождение минимума:</p>
+<blockquote>
+<div><div class="highlight-text notranslate"><div class="highlight"><pre><span></span>int minimum = st.top().second;
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="id2">
+<h2>Модификация очереди. Способ 1<a class="headerlink" href="#id2" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Способ имеет большой недостаток, хотя, потому что измененная очередь на самом деле не будет хранить все элементы. (т.е. при извлечении элемента из очереди нам надо будет знать значение элемента, который мы хотим извлечь).</p>
+<p>Основная идея состоит в том, чтобы хранить только те элементы в очереди, которые необходимы для определения минимума.</p>
+<p>А именно мы будем держать <strong>неубывающую последовательность чисел</strong> очередь (т. е. наименьшее значение будет храниться в голове), и, конечно, не каким-либо произвольным образом, фактический минимум должен всегда содержаться в очереди. Таким образом, самый маленький элемент всегда будет находиться в голове очереди.</p>
+<ul class="simple">
+<li><p>Перед добавлением нового элемента в очередь достаточно сделать <strong>разрез</strong>: мы удалим все конечные элементы очереди, которые больше, чем новый элемент, а затем добавим новый элемент в очередь. (Таким образом, мы не нарушаем порядок очереди, и мы также не потеряем текущий элемент, если он на любом последующем шаге будет минимальным. Все элементы, которые мы удалили, никогда не могут быть минимальными сами по себе, поэтому эта операция разрешена.)</p></li>
+<li><p>При извлечение элемент из головы, его на самом деле может не быть (потому что мы удалили его ранее, добавив меньший элемент). Поэтому при удалении элемента из очереди мы должны знать значение элемента.  Если голова очереди имеет такое же значение, мы можем безопасно удалить его, иначе мы ничего не делаем.</p></li>
+</ul>
+<p>Рассмотрим реализации вышеуказанных операций:</p>
+<p>Реализация:</p>
+<blockquote>
+<div><div class="highlight-text notranslate"><div class="highlight"><pre><span></span>deque&lt;int&gt; q;
+</pre></div>
+</div>
+</div></blockquote>
+<ul>
+<li><p>Добавление элемента:</p>
+<blockquote>
+<div><div class="highlight-text notranslate"><div class="highlight"><pre><span></span>while (!q.empty() &amp;&amp; q.back() &gt; new_element)
+    q.pop_back();
+q.push_back(new_element);
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Извлечение элемента:</p>
+<blockquote>
+<div><div class="highlight-text notranslate"><div class="highlight"><pre><span></span>if (!q.empty() &amp;&amp; q.front() == remove_element)
+        q.pop_front();
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Нахождение минимума:</p>
+<blockquote>
+<div><div class="highlight-text notranslate"><div class="highlight"><pre><span></span>int minimum = q.front();
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ul>
+<p>Понятно, что в среднем время выполнения всех этих операций есть <span class="math notranslate nohighlight">\(O (1)\)</span>.</p>
+</div>
+<div class="section" id="id3">
+<h2>Модификация очереди. (Улучшенный 1)<a class="headerlink" href="#id3" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Мы хотим иметь возможность удалять элементы, не зная, какой элемент мы должны удалить. Мы можем сделать это, сохранив индекс для каждого элемента в очереди. И мы также помним, сколько элементов мы уже добавили и удалили.</p>
+<p>Реализация:</p>
+<blockquote>
+<div><div class="highlight-text notranslate"><div class="highlight"><pre><span></span>deque&lt;pair&lt;int, int&gt;&gt; q;
+int cnt_added = 0;
+int cnt_removed = 0;
+</pre></div>
+</div>
+</div></blockquote>
+<ul>
+<li><p>Добавление элемента:</p>
+<blockquote>
+<div><div class="highlight-text notranslate"><div class="highlight"><pre><span></span>while (!q.empty() &amp;&amp; q.back().first &gt; new_element)
+        q.pop_back();
+q.push_back({new_element, cnt_added});
+cnt_added++;
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Извлечение элемента:</p>
+<blockquote>
+<div><div class="highlight-text notranslate"><div class="highlight"><pre><span></span>if (!q.empty() &amp;&amp; q.front().second == cnt_removed)
+        q.pop_front();
+cnt_removed++;
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Нахождение минимума:</p>
+<blockquote>
+<div><div class="highlight-text notranslate"><div class="highlight"><pre><span></span>int minimum = q.front().first;
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, 9kin
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

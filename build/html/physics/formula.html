@@ -1,0 +1,220 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="ru" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="ru" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Движение тела, брошенного горизонтально. &mdash; документация algo 1</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script src="../_static/translations.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Алфавитный указатель" href="../genindex.html" />
+    <link rel="search" title="Поиск" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html">
+          
+
+          
+            
+            <img src="../_static/favicon.ico" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">Движение тела, брошенного горизонтально.</a></li>
+<li><a class="reference internal" href="#id2">Движение тела, брошенного под углом к горизонту.</a></li>
+<li><a class="reference internal" href="#id3">Движение тела, брошенного горизонтально.</a></li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">algo</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Движение тела, брошенного горизонтально.</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/physics/formula.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="id1">
+<h1>Движение тела, брошенного горизонтально.<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h1>
+<p><a class="reference external" href="http://primat.org/mathred/mathred.html">http://primat.org/mathred/mathred.html</a></p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}\begin{split}\begin{cases} v_x = v_0 \\ v_y = -gt \end{cases}\end{split}\\\begin{split}\begin{cases} x = v_0 t\\ y = y_0 -\frac{g t^2}{2} \end{cases}\end{split}\\\begin{split}\begin{cases} t = \frac{x}{v_0} \\ y = y_0 - \frac{gx^2}{2v_0^2} \end{cases}\end{split}\\t = \frac{x}{v_0} \rightarrow y(x) = h_0 - \frac{gx^2}{2y^2}\\y = 0 \rightarrow h - \frac{gt^2}{2} = 0 \rightarrow t = \sqrt{\frac{2h_0}{g}}\\x_к = v_0 * \sqrt{\frac{2h_0}{g}}\\v_к = \sqrt{v_x ^ 2 + v_y ^ 2}  = \sqrt{v_0 ^ 2 + (gt)^2} = \sqrt{v_0 ^ 2 + 2gh}\\\tan \alpha_к = \frac{v_y}{v_x} = -\frac{gt}{v_0} = - \frac{\sqrt{2gh}}{v_0}\end{aligned}\end{align} \]</div>
+</div>
+<div class="section" id="id2">
+<h1>Движение тела, брошенного под углом к горизонту.<a class="headerlink" href="#id2" title="Ссылка на этот заголовок">¶</a></h1>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}\begin{split}\begin{cases}  v_x = v_0 * cos \alpha \\ v_y = v_0 * sin \alpha - gt \end{cases}\end{split}\\\begin{split}\begin{cases} x = v_0 \cos \alpha * t  \\ y = v_0 \sin \alpha * t - \frac{gt^2}{2} \end{cases}\end{split}\end{aligned}\end{align} \]</div>
+<hr class="docutils" />
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}y = max \rightarrow v_y  = 0 \rightarrow v_0 \sin \alpha -gt_{под} = 0\\V_0 = \frac{t_{под}g}{\sin \alpha}\\t_{под} = \frac{v_0 \sin \alpha}{g}\\H_{max} = y(при t =t_{под}) = v \sin \alpha t_{под} - \frac{g * t_{под} ^ 2}{2}  = v_o \sin \alpha * \frac{v_0 \sin \alpha}{g} - \frac{g}{2} * \frac{v_0 ^ 2 \sin ^ 2  \alpha}{g^2} = \frac{v_0 ^ 2 \sin ^ 2 \alpha}{2g}\end{aligned}\end{align} \]</div>
+<hr class="docutils" />
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}t{пол} = 2 t{под}\\y = 0 \rightarrow v_0 \sin \alpha  - \frac{gt^2}{2} \rightarrow t{пол} = \frac{2v_o \sin \alpha }{g}\\2 \sin \alpha * \cos \alpha = \sin 2 \alpha \rightarrow L = v_x * t_{пол} = v_0 \cos \alpha * \frac{2v_o \sin \alpha }{g} = \frac{v_o ^ 2 \sin 2 \alpha}{g}\\L_{max} \rightarrow 2 \alpha = \rightarrow 1 \alpha = 45\\\tan \alpha = \frac{v_y}{v_x}\end{aligned}\end{align} \]</div>
+</div>
+<div class="section" id="id3">
+<h1>Движение тела, брошенного горизонтально.<a class="headerlink" href="#id3" title="Ссылка на этот заголовок">¶</a></h1>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}x = x_0 + V_{0x} * t + \frac{a_x t ^ 2}{2}\\x_0=h_0, v_{0x}=0, a_x=g \rightarrow x = h - \frac{gt^2}{2}\\v_x = v_{0x}+a_xt=-gt\\x=0, h - \frac{gt_п^2}{2}=0 \rightarrow t_п = \sqrt{\frac{2a}{g}}\\v_к=-gt=-\sqrt{2gh}\end{aligned}\end{align} \]</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, 9kin
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,341 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="ru" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="ru" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Динамическое программирование &mdash; документация algo 1</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script src="_static/translations.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html">
+          
+
+          
+            
+            <img src="_static/favicon.ico" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">Динамическое программирование</a></li>
+<li><a class="reference internal" href="#o-n-log-n">Используя дерево отрезков на максимум <span class="math notranslate nohighlight">\(O(n \log n)\)</span></a></li>
+<li><a class="reference internal" href="#o-n-2"><span class="math notranslate nohighlight">\(O(n ^ 2)\)</span></a></li>
+<li><a class="reference internal" href="#todo-code">TODO code-</a></li>
+<li><a class="reference internal" href="#id2">Используя бинпоиск <span class="math notranslate nohighlight">\(O(n \log n)\)</span></a></li>
+<li><a class="reference internal" href="#id3">НОП</a></li>
+<li><a class="reference internal" href="#id4">Рюкзак</a></li>
+<li><a class="reference internal" href="#o-nw">Динамического программирования. <span class="math notranslate nohighlight">\(O(NW)\)</span></a></li>
+<li><a class="reference internal" href="#id5">ДП на подотрезках</a></li>
+<li><a class="reference internal" href="#id6">Треангуляция</a></li>
+<li><a class="reference internal" href="#id7">Дп по числам</a></li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">algo</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Динамическое программирование</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/dp.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="id1">
+<h1>Динамическое программирование<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h1>
+<p>НВП - наибольшая возрастающая подпоследоватеьность</p>
+<p><span class="math notranslate nohighlight">\(i &lt; j &lt; n ... &lt; k\)</span></p>
+<p><span class="math notranslate nohighlight">\(a_i &lt; a_j ... a_k\)</span></p>
+</div>
+<div class="section" id="o-n-log-n">
+<h1>Используя дерево отрезков на максимум <span class="math notranslate nohighlight">\(O(n \log n)\)</span><a class="headerlink" href="#o-n-log-n" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Сожмём массив a</p>
+<ol class="arabic simple">
+<li><p>sort(a)</p></li>
+<li><p>TODO</p></li>
+</ol>
+<p>b[x] = НВП окончивающийся элементом x</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="n">b</span><span class="o">.</span><span class="n">relax</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">dp</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="o-n-2">
+<h1><span class="math notranslate nohighlight">\(O(n ^ 2)\)</span><a class="headerlink" href="#o-n-2" title="Ссылка на этот заголовок">¶</a></h1>
+<ol class="arabic simple">
+<li><p><span class="math notranslate nohighlight">\(d[i]\)</span> - наименьшее число на которое заканчивается НВП размером i</p></li>
+<li><p>Изначально мы полагаем <span class="math notranslate nohighlight">\(d[0] = -\infty\)</span>, а все остальные элементы <span class="math notranslate nohighlight">\(d[i] = \infty\)</span>.</p></li>
+<li><p>Считать эту динамику мы будем постепенно, обработав число <span class="math notranslate nohighlight">\(a[0]\)</span>, затем <span class="math notranslate nohighlight">\(a[1]\)</span>, и т.д.</p></li>
+</ol>
+<p>Приведём реализацию этой динамики за <span class="math notranslate nohighlight">\(O (n^2)\)</span>:</p>
+</div>
+<div class="section" id="todo-code">
+<h1>TODO code-<a class="headerlink" href="#todo-code" title="Ссылка на этот заголовок">¶</a></h1>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>int d[MAXN];
+d[0] = -INF;
+for (int i=1; i&lt;=n; ++i)
+    d[i] = INF;
+
+for (int i=0; i&lt;n; i++)
+    for (int j=1; j&lt;=n; j++)
+        if (d[j-1] &lt; a[i] &amp;&amp; a[i] &lt; d[j])
+            d[j] = a[i];
+</pre></div>
+</div>
+</div>
+<div class="section" id="id2">
+<h1>Используя бинпоиск <span class="math notranslate nohighlight">\(O(n \log n)\)</span><a class="headerlink" href="#id2" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Используя функцию <span class="math notranslate nohighlight">\(upper_bound\)</span>  (который возвращает позицию первого элемента, строго большего данного):</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;bits/stdc++.h&gt;</span><span class="cp"></span>
+
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="cp">#define ll long long</span>
+<span class="cp">#define INF (long long) 1e18</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">ll</span> <span class="n">n</span><span class="p">,</span> <span class="n">t</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span><span class="p">;</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="n">ll</span><span class="o">&gt;</span> <span class="n">a</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="n">ll</span><span class="o">&gt;</span> <span class="n">d</span> <span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">INF</span><span class="p">);</span>
+    <span class="n">d</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">INF</span><span class="p">;</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="n">ll</span><span class="o">&gt;</span> <span class="n">p</span> <span class="p">(</span><span class="n">n</span><span class="p">);</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="n">ll</span><span class="o">&gt;</span> <span class="n">no</span> <span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="n">no</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">ll</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">ll</span> <span class="n">j</span> <span class="o">=</span> <span class="n">upper_bound</span><span class="p">(</span><span class="n">d</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">d</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">-</span> <span class="n">d</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">d</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span> <span class="p">{</span>
+                    <span class="n">d</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+                    <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">no</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+                    <span class="n">no</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+            <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">result</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">INF</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">cur</span> <span class="o">=</span> <span class="n">no</span><span class="p">[</span><span class="n">i</span><span class="p">];</span> <span class="n">cur</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span> <span class="n">cur</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="n">cur</span><span class="p">])</span>
+                <span class="n">result</span><span class="p">.</span><span class="n">push_back</span> <span class="p">(</span><span class="n">cur</span><span class="p">);</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+    <span class="n">reverse</span><span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">result</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">result</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">result</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">result</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; &quot;</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="id3">
+<h1>НОП<a class="headerlink" href="#id3" title="Ссылка на этот заголовок">¶</a></h1>
+<p>НОП - наибольшая общая подпоследовательность</p>
+<p>Последовательность <span class="math notranslate nohighlight">\(Z=⟨z_1,z_2,…,z_k⟩\)</span> является подпоследовательностью (англ. subsequence) последовательности <span class="math notranslate nohighlight">\(X=⟨x_1,x_2,…,x_m⟩\)</span>, если существует строго возрастающая последовательность <span class="math notranslate nohighlight">\(⟨i_1,i_2,…,i_k⟩\)</span> индексов <span class="math notranslate nohighlight">\(X\)</span> таких, что для всех <span class="math notranslate nohighlight">\(j=1,2,…,k\)</span> выполняется соотношение <span class="math notranslate nohighlight">\(x_{i_j}=z_j\)</span>.</p>
+<p>Задача:</p>
+<p>Пусть имеются последовательности <span class="math notranslate nohighlight">\(X=⟨x_1,x_2,…,x_m⟩\)</span> и <span class="math notranslate nohighlight">\(Y=⟨y_1,y_2,…,y_n⟩\)</span>. Необходимо найти <span class="math notranslate nohighlight">\(LCS(X,Y)\)</span></p>
+</div>
+<hr class="docutils" />
+<div class="section" id="id4">
+<h1>Рюкзак<a class="headerlink" href="#id4" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Дано <span class="math notranslate nohighlight">\(N\)</span> предметов, <span class="math notranslate nohighlight">\(W\)</span> — вместимость рюкзака, <span class="math notranslate nohighlight">\(w={w_1,w_2,…,w_N}\)</span> — соответствующий ему набор положительных целых весов, <span class="math notranslate nohighlight">\(p={p_1,p_2,…,p_N}\)</span> — соответствующий ему набор положительных целых стоимостей.
+Нужно найти набор бинарных величин <span class="math notranslate nohighlight">\(B={b_1,b_2,…,b_N}\)</span>, где <span class="math notranslate nohighlight">\(b_i=1\)</span>, если предмет <span class="math notranslate nohighlight">\(n_i\)</span> включен в набор, <span class="math notranslate nohighlight">\(b_i=0\)</span>, если предмет <span class="math notranslate nohighlight">\(n_i\)</span> не включен, и такой что:</p>
+<ol class="arabic simple">
+<li><p><span class="math notranslate nohighlight">\(b_1w_1+⋯+b_Nw_N⩽W\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(b_1p_1+⋯+b_Np_N\)</span> максимальна.</p></li>
+</ol>
+</div>
+<div class="section" id="o-nw">
+<h1>Динамического программирования. <span class="math notranslate nohighlight">\(O(NW)\)</span><a class="headerlink" href="#o-nw" title="Ссылка на этот заголовок">¶</a></h1>
+<p>TODO <a class="reference external" href="https://neerc.ifmo.ru/wiki/index.php">https://neerc.ifmo.ru/wiki/index.php</a>?title=Задача_о_рюкзаке</p>
+</div>
+<div class="section" id="id5">
+<h1>ДП на подотрезках<a class="headerlink" href="#id5" title="Ссылка на этот заголовок">¶</a></h1>
+<p>строка s PHOTO TODO</p>
+</div>
+<div class="section" id="id6">
+<h1>Треангуляция<a class="headerlink" href="#id6" title="Ссылка на этот заголовок">¶</a></h1>
+<p>n - вершин многоугольника. Разбить его на треугольники.</p>
+<ol class="arabic simple">
+<li><p>Сумма отрезков треугольника минимальна</p></li>
+<li><p>Отрезки не пересекаются</p></li>
+</ol>
+<p>Решение</p>
+<ol class="arabic simple">
+<li><p>dp[i][j] - цена минимальной треангуляции многоугольника от i до j</p></li>
+</ol>
+</div>
+<div class="section" id="id7">
+<h1>Дп по числам<a class="headerlink" href="#id7" title="Ссылка на этот заголовок">¶</a></h1>
+<p>числа длинной n, суммa цифр k</p>
+<ol class="arabic simple">
+<li><p>dp[i][j] - кол-во чисел с суммой цифр j и длинной i</p></li>
+</ol>
+<p>PHOTO TODO</p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, 9kin
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

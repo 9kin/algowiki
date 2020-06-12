@@ -1,0 +1,348 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="ru" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="ru" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Префикс-функция &mdash; документация algo 1</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script src="_static/translations.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html">
+          
+
+          
+            
+            <img src="_static/favicon.ico" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">Префикс-функция</a></li>
+<li><a class="reference internal" href="#no-o-n-3">❌ Тривиальный алгоритм <span class="math notranslate nohighlight">\(O(n ^ 3)\)</span></a></li>
+<li><a class="reference internal" href="#yes-o-n">✔ Итоговый аггоритм <span class="math notranslate nohighlight">\(O(n)\)</span></a></li>
+<li><a class="reference internal" href="#id2">Применения</a><ul>
+<li><a class="reference internal" href="#o-n-m">Поиск подстроки в строке. Алгоритм Кнута-Морриса-Пратта <span class="math notranslate nohighlight">\(O(n + m)\)</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">algo</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Префикс-функция</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/prefix_func.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="id1">
+<h1>Префикс-функция<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Дана строка <span class="math notranslate nohighlight">\(s[0 \ldots n-1]\)</span>. Требуется вычислить для неё префикс-функцию, т.е. массив чисел <span class="math notranslate nohighlight">\(\pi[0 \ldots n-1]\)</span>, где <span class="math notranslate nohighlight">\(\pi[i]\)</span> определяется следующим образом: это такая наибольшая длина наибольшего собственного суффикса подстроки <span class="math notranslate nohighlight">\(s[0 \ldots i]\)</span>, совпадающего с её префиксом (собственный суффикс — значит не совпадающий со всей строкой). В частности, значение <span class="math notranslate nohighlight">\(\pi[0]\)</span> полагается равным нулю.</p>
+<table class="docutils align-default" id="id3">
+<caption><span class="caption-text">Например, для строки «abcabcd» префикс-функция равна: [0, 0, 0, 1, 2, 3, 0], что означает:</span><a class="headerlink" href="#id3" title="Постоянная ссылка на таблицу">¶</a></caption>
+<colgroup>
+<col style="width: 35%" />
+<col style="width: 18%" />
+<col style="width: 15%" />
+<col style="width: 32%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>строка</p></th>
+<th class="head" colspan="2"><p>совпадает с суффиксом</p></th>
+<th class="head"><p>префикс длины</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>a</p></td>
+<td colspan="2"><p>❌</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p>ab</p></td>
+<td colspan="2"><p>❌</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-even"><td><p>abc</p></td>
+<td colspan="2"><p>❌</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p>abca</p></td>
+<td colspan="2"><p>✔</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p>abcab</p></td>
+<td colspan="2"><p>✔</p></td>
+<td><p>2</p></td>
+</tr>
+<tr class="row-odd"><td><p>abcabc</p></td>
+<td colspan="2"><p>✔</p></td>
+<td><p>3</p></td>
+</tr>
+<tr class="row-even"><td><p>abcabcd</p></td>
+<td colspan="2"><p>❌</p></td>
+<td><p>0</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="no-o-n-3">
+<h1>❌ Тривиальный алгоритм <span class="math notranslate nohighlight">\(O(n ^ 3)\)</span><a class="headerlink" href="#no-o-n-3" title="Ссылка на этот заголовок">¶</a></h1>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>vector&lt;int&gt; prefix_function (string s) {
+    int n = (int) s.length();
+    vector&lt;int&gt; pi (n);
+    for (int i=0; i&lt;n; ++i)
+        for (int k=0; k&lt;=i; ++k)
+            if (s.substr(0,k) == s.substr(i-k+1,k))
+                pi[i] = k;
+    return pi;
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="yes-o-n">
+<h1>✔ Итоговый аггоритм <span class="math notranslate nohighlight">\(O(n)\)</span><a class="headerlink" href="#yes-o-n" title="Ссылка на этот заголовок">¶</a></h1>
+<ul class="simple">
+<li><p>Считать значения префикс-функции <span class="math notranslate nohighlight">\(\pi[i]\)</span> будем по очереди: от <span class="math notranslate nohighlight">\(i=1\)</span> к <span class="math notranslate nohighlight">\(i=n-1\)</span> (значение <span class="math notranslate nohighlight">\(\pi[0]\)</span> просто присвоим равным нулю).</p></li>
+<li><p>Для подсчёта текущего значения <span class="math notranslate nohighlight">\(\pi[i]\)</span> мы заводим переменную <span class="math notranslate nohighlight">\(j\)</span>, обозначающую длину текущего рассматриваемого образца. Изначально <span class="math notranslate nohighlight">\(j = \pi[i-1]\)</span>.</p></li>
+<li><p>Тестируем образец длины <span class="math notranslate nohighlight">\(j\)</span>, для чего сравниваем символы <span class="math notranslate nohighlight">\(s[j]\)</span> и <span class="math notranslate nohighlight">\(s[i]\)</span>. Если они совпадают — то полагаем <span class="math notranslate nohighlight">\(\pi[i] = j+1\)</span> и переходим к следующему индексу <span class="math notranslate nohighlight">\(i+1\)</span>. Если же символы отличаются, то уменьшаем длину j, полагая её равной <span class="math notranslate nohighlight">\(\pi[j-1]\)</span>, и повторяем этот шаг алгоритма с начала.</p></li>
+<li><p>Если мы дошли до длины <span class="math notranslate nohighlight">\(j=0\)</span> и так и не нашли совпадения, то останавливаем процесс перебора образцов и полагаем <span class="math notranslate nohighlight">\(\pi[i] = 0\)</span> и переходим к следующему индексу <span class="math notranslate nohighlight">\(i+1\)</span>.</p></li>
+</ul>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>vector&lt;int&gt; prefix_function (string s) {
+    int n = (int) s.length();
+    vector&lt;int&gt; pi (n);
+    for (int i=1; i&lt;n; ++i) {
+        int j = pi[i-1];
+        while (j &gt; 0 &amp;&amp; s[i] != s[j])
+            j = pi[j-1];
+        if (s[i] == s[j])  ++j;
+        pi[i] = j;
+    }
+    return pi;
+}
+</pre></div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="id2">
+<h1>Применения<a class="headerlink" href="#id2" title="Ссылка на этот заголовок">¶</a></h1>
+<div class="section" id="o-n-m">
+<h2>Поиск подстроки в строке. Алгоритм Кнута-Морриса-Пратта <span class="math notranslate nohighlight">\(O(n + m)\)</span><a class="headerlink" href="#o-n-m" title="Ссылка на этот заголовок">¶</a></h2>
+<p><span class="math notranslate nohighlight">\(O(n + m)\)</span> времени и <span class="math notranslate nohighlight">\(O(n)\)</span> памяти.</p>
+<p>Эта задача является классическим применением префикс-функции (и, собственно, она и была открыта в связи с этим).</p>
+<p>Дан текст <span class="math notranslate nohighlight">\(t\)</span> и строка <span class="math notranslate nohighlight">\(s\)</span>, требуется найти и вывести позиции всех вхождений строки <span class="math notranslate nohighlight">\(s\)</span> в текст <span class="math notranslate nohighlight">\(t\)</span>.</p>
+<p>Обозначим для удобства через <span class="math notranslate nohighlight">\(n\)</span> длину строки <span class="math notranslate nohighlight">\(s\)</span>, а через <span class="math notranslate nohighlight">\(m\)</span> — длину текста <span class="math notranslate nohighlight">\(t\)</span>.</p>
+<ol class="arabic simple">
+<li><p>Образуем строку <span class="math notranslate nohighlight">\(s + \# + t\)</span>, где символ <span class="math notranslate nohighlight">\(\#\)</span> — это разделитель, который не должен нигде более встречаться.</p></li>
+<li><p>Посчитаем для этой строки префикс-функцию.</p></li>
+<li><ol class="arabic simple">
+<li><p>Теперь рассмотрим её значения, кроме первых <span class="math notranslate nohighlight">\(n+1\)</span> (которые, как видно, относятся к строке <span class="math notranslate nohighlight">\(s\)</span> и разделителю).</p></li>
+<li><p>Но в нашем случае это <span class="math notranslate nohighlight">\(\pi[i]\)</span> — фактически длина наибольшего блока совпадения со строкой <span class="math notranslate nohighlight">\(s\)</span> и оканчивающегося в позиции <span class="math notranslate nohighlight">\(i\)</span>. Больше, чем <span class="math notranslate nohighlight">\(n\)</span>, эта длина быть не может — за счёт разделителя. А вот равенство <span class="math notranslate nohighlight">\(\pi[i] = n\)</span> (там, где оно достигается), означает, что в позиции <span class="math notranslate nohighlight">\(i\)</span> оканчивается искомое вхождение строки s (только не надо забывать, что все позиции отсчитываются в склеенной строке <span class="math notranslate nohighlight">\(s+\#+t\)</span>).</p></li>
+</ol>
+</li>
+</ol>
+<p>Таким образом, если в какой-то позиции <span class="math notranslate nohighlight">\(i\)</span> оказалось <span class="math notranslate nohighlight">\(\pi[i] = n\)</span>, то в позиции <span class="math notranslate nohighlight">\(i - (n + 1) - n + 1 = i - 2 n\)</span> строки <span class="math notranslate nohighlight">\(t\)</span> начинается очередное вхождение строки <span class="math notranslate nohighlight">\(s\)</span> в строку <span class="math notranslate nohighlight">\(t\)</span>.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;bits/stdc++.h&gt;</span><span class="cp"></span>
+
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="k">typedef</span> <span class="kt">long</span> <span class="kt">long</span> <span class="n">ll</span><span class="p">;</span>
+
+<span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">pf</span><span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span> <span class="n">s</span><span class="p">.</span><span class="n">length</span><span class="p">();</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">pi</span> <span class="p">(</span><span class="n">n</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">pi</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">j</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+            <span class="n">j</span> <span class="o">=</span> <span class="n">pi</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>  <span class="o">++</span><span class="n">j</span><span class="p">;</span>
+        <span class="n">pi</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">j</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">pi</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">ios</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+
+    <span class="n">string</span> <span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">s</span> <span class="o">&gt;&gt;</span> <span class="n">t</span><span class="p">;</span>
+    <span class="k">auto</span> <span class="n">pfv</span> <span class="o">=</span> <span class="n">pf</span><span class="p">(</span><span class="n">s</span> <span class="o">+</span> <span class="s">&quot;#&quot;</span> <span class="o">+</span> <span class="n">t</span><span class="p">);</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="n">ll</span><span class="o">&gt;</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">pfv</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">pfv</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">())</span> <span class="p">{</span>
+            <span class="n">ans</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">ans</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">i</span> <span class="p">:</span> <span class="n">ans</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">i</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; &quot;</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, 9kin
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
