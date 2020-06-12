@@ -1,0 +1,1 @@
+`<https://algowiki.readthedocs.io/ru/latest/index.html>`_
