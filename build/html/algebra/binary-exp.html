@@ -89,6 +89,7 @@
               <div class="local-toc"><ul>
 <li><a class="reference internal" href="#">Бинарное возведение в степень</a><ul>
 <li><a class="reference internal" href="#id2">Алгоритм</a></li>
+<li><a class="reference internal" href="#a-n-mod-p"><span class="math notranslate nohighlight">\(a^{n} (mod) p\)</span></a></li>
 </ul>
 </li>
 </ul>
@@ -161,33 +162,41 @@
 <div class="section" id="id2">
 <h2>Алгоритм<a class="headerlink" href="#id2" title="Ссылка на этот заголовок">¶</a></h2>
 <div class="math notranslate nohighlight">
-\[ \begin{align}\begin{aligned}a\in R\\n = 2k\\a^n = (a^{n/2}) ^2 = a^{n/2} * a^{n/2}\end{aligned}\end{align} \]</div>
+\[\begin{split}a^{n} =
+ \begin{cases}
+   1 &amp;n = 0\\
+   (a^{n/2}) ^2 = a^{n/2} \times a^{n/2} &amp;n = 2k\\
+   a^{n-1} \times n &amp;n \neq 2k
+ \end{cases}\end{split}\]</div>
 <hr class="docutils" />
-<div class="math notranslate nohighlight">
-\[ \begin{align}\begin{aligned}a\in R\\n != 2k\\a^n = a^{n-1} * n\end{aligned}\end{align} \]</div>
-<hr class="docutils" />
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>long long binpow(long long a, long long b) {
-    if (b == 0)
-        return 1;
-    long long res = binpow(a, b / 2);
-    if (b % 2)
-        return res * res * a;
-    else
-        return res * res;
-}
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">ll</span> <span class="nf">binpow</span> <span class="p">(</span><span class="n">ll</span> <span class="n">a</span><span class="p">,</span> <span class="n">ll</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">binpow</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span><span class="p">;</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="n">ll</span> <span class="n">b</span> <span class="o">=</span> <span class="n">binpow</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">n</span> <span class="o">/</span> <span class="mi">2</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">b</span> <span class="o">*</span> <span class="n">b</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 </pre></div>
 </div>
-<p>(деления на 2 заменены битовыми операциями)</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>long long binpow(long long a, long long b) {
-    long long res = 1;
-    while (b &gt; 0) {
-        if (b &amp; 1)
-            res = res * a;
-        a = a * a;
-        b &gt;&gt;= 1;
-    }
-    return res;
-}
+</div>
+<div class="section" id="a-n-mod-p">
+<h2><span class="math notranslate nohighlight">\(a^{n} (mod) p\)</span><a class="headerlink" href="#a-n-mod-p" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Поскольку мы знаем, что <span class="math notranslate nohighlight">\(mod\)</span> не вмешивается в умножение</p>
+<div class="math notranslate nohighlight">
+\[a\times b\equiv (a \bmod m)\times(b \bmod m) \pmod m\]</div>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">ll</span> <span class="nf">binpow</span> <span class="p">(</span><span class="n">ll</span> <span class="n">a</span><span class="p">,</span> <span class="n">ll</span> <span class="n">n</span><span class="p">,</span> <span class="n">ll</span> <span class="n">p</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">binpow</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span> <span class="o">%</span> <span class="n">p</span><span class="p">;</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="n">ll</span> <span class="n">b</span> <span class="o">=</span> <span class="n">binpow</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">n</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">p</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">b</span> <span class="o">*</span> <span class="n">b</span> <span class="o">%</span> <span class="n">p</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 <p><a class="reference external" href="https://www.e-olymp.com/ru/problems/273">Возведение в степень</a></p>

@@ -8,56 +8,51 @@
 
 
 
-
 .. math:: 
-	a\in R 
-
-	n = 2k
-	
-	a^n = (a^{n/2}) ^2 = a^{n/2} * a^{n/2}
-
-___________________
-
-
-.. math:: 
-	a\in R 
-
-	n != 2k
-	
-	a^n = a^{n-1} * n
+   
+    a^{n} = 
+     \begin{cases}
+       1 &n = 0\\
+       (a^{n/2}) ^2 = a^{n/2} \times a^{n/2} &n = 2k\\
+       a^{n-1} \times n &n \neq 2k
+     \end{cases}
 
 ________________________
 
-.. code-block:: text
+.. code-block:: cpp
 
-	long long binpow(long long a, long long b) {
-	    if (b == 0)
-		return 1;
-	    long long res = binpow(a, b / 2);
-	    if (b % 2)
-		return res * res * a;
-	    else
-		return res * res;
-	}
+    ll binpow (ll a, ll n) {
+        if (n == 0)
+            return 1;
+        if (n % 2 == 1)
+            return binpow(a, n - 1) * a;
+        else {
+            ll b = binpow(a, n / 2);
+            return b * b;
+        }
+    }
 
-(деления на 2 заменены битовыми операциями)
 
-.. code-block:: text
+:math:`a^{n} (mod) p`
+++++++++++++++++++++++
 
-	long long binpow(long long a, long long b) {
-	    long long res = 1;
-	    while (b > 0) {
-		if (b & 1)
-		    res = res * a;
-		a = a * a;
-		b >>= 1;
-	    }
-	    return res;
-	}
+Поскольку мы знаем, что :math:`mod` не вмешивается в умножение
+
+.. math:: 
+    
+    a\times b\equiv (a \bmod m)\times(b \bmod m) \pmod m
+
+.. code-block:: cpp
+
+    ll binpow (ll a, ll n, ll p) {
+        if (n == 0)
+            return 1;
+        if (n % 2 == 1)
+            return binpow(a, n - 1, p) * a % p;
+        else {
+            ll b = binpow(a, n / 2, p);
+            return b * b % p;
+        }
+    }
 
 `Возведение в степень <https://www.e-olymp.com/ru/problems/273>`_
-
-
-
-
-
